@@ -1,0 +1,48 @@
+/* HERO */
+.hero-privacy {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-privacy h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-privacy p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* PRIVACIDADE */
+.privacy-section {
+  max-width: 900px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+}
+
+.privacy-block {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-lg);
+}
+
+.privacy-block h2 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--brand-dark);
+}
+
+.privacy-block p {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}

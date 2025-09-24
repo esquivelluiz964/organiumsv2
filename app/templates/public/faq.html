@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}FAQ - Organiums{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-faq">
+
+    <div class="hero-faq-content">
+
+        <h1>Perguntas Frequentes</h1>
+
+        <p>Encontre respostas rápidas sobre a Organiums, planos e funcionalidades da plataforma.</p>
+
+    </div>
+
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+
+    <div class="faq-item">
+
+        <button class="faq-question">O que é a Organiums?</button>
+
+        <div class="faq-answer">
+
+            <p>A Organiums é a plataforma definitiva de organização pessoal e profissional, voltada para colaboradores de empresas que buscam produtividade e bem-estar.</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">Como posso contratar um plano?</button>
+
+        <div class="faq-answer">
+
+            <p>Você pode acessar a página de Planos, escolher o ideal e entrar em contato conosco para assinatura ou demonstração.</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">A plataforma é segura?</button>
+
+        <div class="faq-answer">
+
+            <p>Sim! Utilizamos práticas modernas de segurança, criptografia e proteção de dados para garantir a confidencialidade dos colaboradores e da empresa.</p>
+
+        </div>
+
+    </div>
+
+  <div class="faq-item">
+
+    <button class="faq-question">Posso testar antes de assinar?</button>
+
+    <div class="faq-answer">
+
+        <p>Sim, oferecemos uma demonstração da plataforma para que sua equipe possa conhecer todas as funcionalidades antes de decidir pelo plano.</p>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+
+    <h2>Não encontrou sua resposta?</h2>
+
+    <a href="/contato" class="btn-primary">Fale com a gente</a>
+
+</section>
+
+{% endblock %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/pages/public/faq.js') }}"></script>
+{% endblock %}

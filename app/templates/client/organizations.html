@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Minhas Organizações - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Minhas Organizações</h1>
+  <a href="{{ url_for('app_bp.organizations_new') }}" class="btn">+ Nova Organização</a>
+  <ul class="client-list">
+    {% for org in organizations %}
+      <li>
+        <strong>{{ org.name }}</strong> - {{ org.description or "-" }}
+        <form method="POST" action="{{ url_for('app_bp.organizations_delete', id=org.id) }}" style="display:inline;">
+          <button type="submit" class="btn btn-danger">Excluir</button>
+        </form>
+      </li>
+    {% else %}
+      <p class="empty-state">Você ainda não criou organizações.</p>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

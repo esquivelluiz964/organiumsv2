@@ -1,0 +1,168 @@
+/* HERO */
+.hero-ajuda {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-ajuda h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-ajuda p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* FORMULÁRIO PÚBLICO */
+.ajuda-form-section {
+  max-width: 700px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+}
+
+.ajuda-form-section label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.ajuda-form-section input,
+.ajuda-form-section textarea {
+  width: 100%;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--muted-light);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.ajuda-form-section input:focus,
+.ajuda-form-section textarea:focus {
+  border-color: var(--brand-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(14, 165, 164, 0.2);
+}
+
+.ajuda-form-section button {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--brand-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ajuda-form-section button:hover {
+  background: var(--brand-dark);
+}
+
+/* TABELA ADMIN - LISTAGEM DE TICKETS */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-xl);
+}
+
+thead {
+  background: var(--brand-primary);
+  color: white;
+}
+
+thead th {
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+
+tbody tr {
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--muted-light);
+}
+
+tbody td {
+  padding: var(--spacing-sm);
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--bg);
+}
+
+table a {
+  color: var(--brand-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+table a:hover {
+  color: var(--brand-dark);
+  text-decoration: underline;
+}
+
+/* FORMULÁRIO ADMIN */
+form select {
+  padding: var(--spacing-sm);
+  border-radius: var(--radius);
+  border: 1px solid var(--muted-light);
+  margin-bottom: var(--spacing-md);
+  font-size: 1rem;
+}
+
+form button {
+  background: var(--brand-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+form button:hover {
+  background: var(--brand-dark);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .ajuda-form-section,
+  table {
+    padding: 0 var(--spacing-sm);
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table, tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: var(--spacing-md);
+  }
+
+  td {
+    padding: var(--spacing-sm);
+    text-align: right;
+    position: relative;
+  }
+
+  td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 500;
+    color: var(--fg);
+  }
+}

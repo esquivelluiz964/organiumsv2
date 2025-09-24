@@ -1,0 +1,33 @@
+{# admin/usuario_form.html #}
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% if user %}Editar usuário{% else %}Novo usuário{% endif %}</h2>
+
+<form method="post">
+  <label>Username<input name="username" value="{{ user.username if user }}"></label>
+  <label>Nome<input name="name" value="{{ user.name if user }}"></label>
+  <label>Email<input name="email" value="{{ user.email if user }}"></label>
+
+  <label>Role
+    <select name="role">
+      <option value="cliente" {% if user and user.role=='cliente' %}selected{% endif %}>Cliente</option>
+      <option value="cliente_adm" {% if user and user.role=='cliente_adm' %}selected{% endif %}>Cliente Admin</option>
+      <option value="funcionarios" {% if user and user.role=='funcionarios' %}selected{% endif %}>Funcionário</option>
+      <option value="admin" {% if user and user.role=='admin' %}selected{% endif %}>Admin</option>
+    </select>
+  </label>
+
+  <label>Empresa (nome)
+    <input name="company" list="companies_list" value="{{ user.company.name if user and user.company }}">
+    <datalist id="companies_list">
+      {% for c in companies %}
+        <option value="{{ c.name }}"></option>
+      {% endfor %}
+    </datalist>
+  </label>
+
+  <label>Senha (preencha para alterar)<input name="password" type="password"></label>
+
+  <button type="submit">Salvar</button>
+</form>
+{% endblock %}

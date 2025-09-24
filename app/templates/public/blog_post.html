@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.titulo }} - Blog Organiums{% endblock %}
+
+{% block content %}
+
+<section class="blog-hero">
+
+    <h1>{{ post.titulo }}</h1>
+
+    <small>Publicado em {{ post.criado_em.strftime('%d/%m/%Y') }} por {{ post.autor.name }}</small>
+
+</section>
+
+<section class="blog-content">
+
+    {{ post.conteudo | safe }}
+
+</section>
+
+<a href="{{ url_for('app_bp.blog') }}" class="btn-primary">Voltar para Blog</a>
+
+{% endblock %}

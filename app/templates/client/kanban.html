@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block title %}Kanban de Demandas - Organiums{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kanban.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container client-section">
+    <div class="kanban-header">
+        <h1>Kanban de Demandas</h1>
+        <div class="kanban-actions">
+            <button class="btn-primary" onclick="openCreateKanbanModal()">
+                + Novo Quadro
+            </button>
+            <select id="kanbanSelector" onchange="loadKanban(this.value)">
+                <option value="">Selecione um quadro...</option>
+                {% for board in kanban_boards %}
+                <option value="{{ board.id }}">{{ board.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div id="kanbanContainer" class="kanban-container">
+        <div class="empty-state" id="emptyState">
+            <p>Selecione ou crie um quadro kanban para começar</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para criar novo quadro -->
+<div id="createKanbanModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('createKanbanModal')">&times;</span>
+        <h2>Novo Quadro Kanban</h2>
+        <form method="POST" action="{{ url_for('app_bp.create_kanban') }}">
+            <div class="form-group">
+                <label for="kanbanName">Nome do Quadro:</label>
+                <input type="text" id="kanbanName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="kanbanDescription">Descrição:</label>
+                <textarea id="kanbanDescription" name="description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Criar Quadro</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para criar/editar card -->
+<div id="cardModal" class="modal">
+    <div class="modal-content large">
+        <span class="close" onclick="closeModal('cardModal')">&times;</span>
+        <h2 id="cardModalTitle">Novo Card</h2>
+        <form id="cardForm" method="POST">
+            <input type="hidden" name="card_id" id="cardId">
+            <input type="hidden" name="column_id" id="columnId">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cardTitle">Título:</label>
+                    <input type="text" id="cardTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardPrazo">Prazo:</label>
+                    <input type="date" id="cardPrazo" name="prazo">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cardDescription">Descrição:</label>
+                <textarea id="cardDescription" name="description" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="cardOQueFazer">O que será feito:</label>
+                <textarea id="cardOQueFazer" name="o_que_fazer" rows="3" required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cardOndeFazer">Onde será feito:</label>
+                    <input type="text" id="cardOndeFazer" name="onde_fazer">
+                </div>
+                <div class="form-group">
+                    <label for="cardQuemFazer">Quem fará:</label>
+                    <select id="cardQuemFazer" name="quem_fazer_id">
+                        <option value="">Selecione...</option>
+                        {% for collab in collaborators %}
+                        <option value="{{ collab.id }}">{{ collab.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cardSetor">Setor:</label>
+                    <select id="cardSetor" name="setor_id">
+                        <option value="">Selecione...</option>
+                        {% for sector in sectors %}
+                        <option value="{{ sector.id }}">{{ sector.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="gut-criteria">
+                <h3>Critérios GUT</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cardGravidade">Gravidade (1-5):</label>
+                        <select id="cardGravidade" name="gravidade">
+                            {% for i in range(1, 6) %}
+                            <option value="{{ i }}">{{ i }} - {{ ['Mínima', 'Baixa', 'Média', 'Alta', 'Crítica'][i-1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardUrgencia">Urgência (1-5):</label>
+                        <select id="cardUrgencia" name="urgencia">
+                            {% for i in range(1, 6) %}
+                            <option value="{{ i }}">{{ i }} - {{ ['Pode esperar', 'Pouco urgente', 'Urgente', 'Muito urgente', 'Imediato'][i-1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardTendencia">Tendência (1-5):</label>
+                        <select id="cardTendencia" name="tendencia">
+                            {% for i in range(1, 6) %}
+                            <option value="{{ i }}">{{ i }} - {{ ['Melhora', 'Estável', 'Piora lentamente', 'Piora', 'Piora rapidamente'][i-1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="gut-score">
+                    <strong>Pontuação GUT: <span id="gutScore">0</span></strong>
+                    <small>(Gravidade × Urgência × Tendência)</small>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Salvar Card</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/kanban.js') }}"></script>
+<script>
+// Dados globais
+let currentKanban = null;
+let collaboratorsData = {{ collaborators|tojson|safe }};
+let sectorsData = {{ sectors|tojson|safe }};
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    // Calcular pontuação GUT
+    const gutFields = ['cardGravidade', 'cardUrgencia', 'cardTendencia'];
+    gutFields.forEach(field => {
+        document.getElementById(field).addEventListener('change', calculateGUTScore);
+    });
+});
+
+function calculateGUTScore() {
+    const gravidade = parseInt(document.getElementById('cardGravidade').value) || 1;
+    const urgencia = parseInt(document.getElementById('cardUrgencia').value) || 1;
+    const tendencia = parseInt(document.getElementById('cardTendencia').value) || 1;
+    const score = gravidade * urgencia * tendencia;
+    document.getElementById('gutScore').textContent = score;
+}
+
+function openCreateKanbanModal() {
+    document.getElementById('createKanbanModal').style.display = 'block';
+}
+
+function openCardModal(columnId = null, cardData = null) {
+    const modal = document.getElementById('cardModal');
+    const form = document.getElementById('cardForm');
+    const title = document.getElementById('cardModalTitle');
+    
+    if (cardData) {
+        title.textContent = 'Editar Card';
+        form.action = "{{ url_for('app_bp.edit_kanban_card', card_id=0) }}".replace('0', cardData.id);
+        populateCardForm(cardData);
+    } else {
+        title.textContent = 'Novo Card';
+        form.action = "{{ url_for('app_bp.create_kanban_card') }}";
+        resetCardForm();
+        if (columnId) {
+            document.getElementById('columnId').value = columnId;
+        }
+    }
+    
+    modal.style.display = 'block';
+}
+
+function populateCardForm(cardData) {
+    document.getElementById('cardId').value = cardData.id;
+    document.getElementById('cardTitle').value = cardData.title || '';
+    document.getElementById('cardDescription').value = cardData.description || '';
+    document.getElementById('cardOQueFazer').value = cardData.o_que_fazer || '';
+    document.getElementById('cardOndeFazer').value = cardData.onde_fazer || '';
+    document.getElementById('cardQuemFazer').value = cardData.responsavel?.id || '';
+    document.getElementById('cardSetor').value = cardData.setor?.id || '';
+    document.getElementById('cardGravidade').value = cardData.gravidade || 1;
+    document.getElementById('cardUrgencia').value = cardData.urgencia || 1;
+    document.getElementById('cardTendencia').value = cardData.tendencia || 1;
+    
+    if (cardData.prazo) {
+        const prazoDate = new Date(cardData.prazo).toISOString().split('T')[0];
+        document.getElementById('cardPrazo').value = prazoDate;
+    }
+    
+    calculateGUTScore();
+}
+
+function resetCardForm() {
+    document.getElementById('cardForm').reset();
+    document.getElementById('cardId').value = '';
+    calculateGUTScore();
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+    const modals = document.getElementsByClassName('modal');
+    for (let modal of modals) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+}
+</script>
+{% endblock %}

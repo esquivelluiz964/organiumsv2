@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Novo Post - Admin{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/private/blog.css') }}">
+
+<section class="admin-section">
+    <h1>Novo Post</h1>
+
+    <form method="POST" class="blog-form">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" required>
+
+        <label for="slug">Slug (URL Amigável)</label>
+        <input type="text" id="slug" name="slug" required placeholder="ex: meu-primeiro-post">
+
+        <label for="resumo">Resumo</label>
+        <textarea id="resumo" name="resumo" rows="3"></textarea>
+
+        <label for="conteudo">Conteúdo</label>
+        <textarea id="conteudo" name="conteudo" rows="8" required></textarea>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{{ url_for('app_bp.admin_blog') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

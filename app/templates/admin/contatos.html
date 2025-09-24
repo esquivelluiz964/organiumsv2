@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Contatos - Admin{% endblock %}
+
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/admin/contatos.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Mensagens de Contato</h1>
+  <p class="muted">Aqui estão as perguntas enviadas pelos usuários via formulário de contato.</p>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Empresa</th>
+          <th>Mensagem</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in contatos %}
+        <tr>
+          <td data-label="ID">{{ c.id }}</td>
+          <td data-label="Nome">{{ c.nome }}</td>
+          <td data-label="Email">{{ c.email }}</td>
+          <td data-label="Empresa">{{ c.empresa or '-' }}</td>
+          <td data-label="Mensagem">{{ c.mensagem }}</td>
+          <td data-label="Data">{{ c.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6">Nenhum contato registrado.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

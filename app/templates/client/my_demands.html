@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Minhas Demandas - Organiums{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kanban.css') }}">
+<style>
+.kanban-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.kanban-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.empty-card {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+.my-demands-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+}
+
+.my-demands-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.my-demands-header p {
+    margin: 0.5rem 0 0 0;
+    opacity: 0.9;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--brand-primary);
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container client-section">
+    <div class="my-demands-header">
+        <h1>📋 Minhas Demandas</h1>
+        <p>Visualize todas as tarefas atribuídas a você ou criadas por você</p>
+    </div>
+
+    <!-- Estatísticas rápidas -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <div class="stat-number" id="totalCards">0</div>
+            <div class="stat-label">Total de Tarefas</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="pendingCards">0</div>
+            <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="urgentCards">0</div>
+            <div class="stat-label">Urgentes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="lateCards">0</div>
+            <div class="stat-label">Atrasadas</div>
+        </div>
+    </div>
+
+    <!-- Seletor de Quadro -->
+    <div class="kanban-header">
+        <h2>Quadros com suas demandas</h2>
+        <select id="kanbanSelector" onchange="loadMyKanban(this.value)">
+            <option value="">Selecione um quadro...</option>
+            {% for board in kanban_boards %}
+            <option value="{{ board.id }}">{{ board.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Container do Kanban -->
+    <div id="kanbanContainer" class="kanban-container">
+        <div class="empty-state" id="emptyState">
+            <p>Selecione um quadro para visualizar suas demandas</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para visualização detalhada (reutilizamos o mesmo modal) -->
+<div id="cardModal" class="modal">
+    <div class="modal-content large">
+        <span class="close" onclick="closeModal('cardModal')">&times;</span>
+        <h2>Detalhes da Demanda</h2>
+        <div id="cardDetails">
+            <!-- Conteúdo será preenchido via JavaScript -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/my_demands.js') }}"></script>
+<script>
+// Dados globais - CORRIGIDO: sem duplicação
+const currentUserId = {{ current_user.id }};
+const myKanbanData = {{ kanban_boards|tojson|safe }};
+const currentUserRole = "{{ current_user.role }}";
+
+console.log("Dados carregados:", myKanbanData);
+console.log("User ID:", currentUserId);
+
+// Inicialização específica para minha visão
+document.addEventListener('DOMContentLoaded', function() {
+    calculateMyStats();
+    
+    // Se há apenas um quadro, carregar automaticamente
+    if (myKanbanData.length === 1) {
+        document.getElementById('kanbanSelector').value = myKanbanData[0].id;
+        loadMyKanban(myKanbanData[0].id);
+    }
+    
+    // Definir função global
+    window.loadMyKanban = function(boardId) {
+        if (window.myDemandsManager) {
+            window.myDemandsManager.loadMyKanban(boardId);
+        }
+    };
+});
+
+function calculateMyStats() {
+    let total = 0;
+    let pending = 0;
+    let urgent = 0;
+    let late = 0;
+    const today = new Date();
+
+    console.log("Calculando estatísticas para", myKanbanData.length, "quadros");
+
+    myKanbanData.forEach(board => {
+        console.log("Quadro:", board.name, "com", board.columns.length, "colunas");
+        
+        board.columns.forEach(column => {
+            console.log("Coluna:", column.name, "com", column.cards.length, "cards");
+            
+            column.cards.forEach(card => {
+                total++;
+                
+                // Pendentes (não estão em "Done")
+                if (column.name !== 'Done' && column.name !== 'Concluído') {
+                    pending++;
+                }
+                
+                // Urgentes (GUT score alto ou prazo próximo)
+                const gutScore = card.gravidade * card.urgencia * card.tendencia;
+                const prazoDate = card.prazo ? new Date(card.prazo) : null;
+                
+                if (gutScore >= 50 || (prazoDate && prazoDate < new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000))) {
+                    urgent++;
+                }
+                
+                // Atrasadas
+                if (prazoDate && prazoDate < today) {
+                    late++;
+                }
+            });
+        });
+    });
+
+    console.log("Estatísticas - Total:", total, "Pendentes:", pending, "Urgentes:", urgent, "Atrasadas:", late);
+
+    document.getElementById('totalCards').textContent = total;
+    document.getElementById('pendingCards').textContent = pending;
+    document.getElementById('urgentCards').textContent = urgent;
+    document.getElementById('lateCards').textContent = late;
+}
+</script>
+{% endblock %}

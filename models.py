@@ -119,9 +119,18 @@ class Event(db.Model):
     description = db.Column(db.Text)
     start_at = db.Column(db.DateTime)
     end_at = db.Column(db.DateTime)
+    
+    responsavel_id = db.Column(db.Integer, db.ForeignKey('collaborator.id'), nullable=True)
+    setor_id = db.Column(db.Integer, db.ForeignKey('sector.id'), nullable=True)
+    cor = db.Column(db.String(7), default='#3b82f6')  # Cor do evento em HEX
+    tipo = db.Column(db.String(50), default='evento')  # evento, reuniao, tarefa, etc.
+    
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     company = db.relationship('Company', backref='events')
+    responsavel = db.relationship('Collaborator', backref='events')
+    setor = db.relationship('Sector', backref='events')
 
 class Demand(db.Model):
     __tablename__ = "demand"

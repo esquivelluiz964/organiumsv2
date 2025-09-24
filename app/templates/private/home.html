@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h2>Bem-vindo, {{ current_user.name or current_user.email }}!</h2>
+  <p class="muted">Selecione uma área para acessar:</p>
+
+  <div class="dashboard-grid">
+
+    <!-- Sessão Administrativa (admin + funcionarios) -->
+    {% if current_user.is_admin() or current_user.is_funcionario() %}
+
+      <a href="{{ url_for('app_bp.admin_blog') }}" class="dash-card"> 
+        <div class="card-icon">📝</div> 
+        <h3>Gerenciar Blog</h3> 
+        <p>Criar, editar e remover posts do blog.</p> 
+      </a> 
+
+      <a href="{{ url_for('app_bp.admin_ajuda') }}" class="dash-card"> 
+        <div class="card-icon">💬</div> 
+        <h3>Central de Ajuda</h3> 
+        <p>Gerencie tickets de suporte dos usuários.</p> 
+      </a> 
+
+      <a href="{{ url_for('app_bp.admin_contatos') }}" class="dash-card"> 
+        <div class="card-icon">📨</div> 
+        <h3>Mensagens de Contato</h3> 
+        <p>Veja quem entrou em contato e o que perguntou.</p> 
+      </a> 
+
+      <a href="{{ url_for('app_bp.admin_usuarios') }}" class="dash-card"> 
+        <div class="card-icon">👨‍💻</div> 
+        <h3>Gestão de Usuários</h3> 
+        <p>Gerenciar contas, permissões e papéis.</p> 
+      </a> 
+
+      <a href="{{ url_for('app_bp.admin_logs') }}" class="dash-card"> 
+        <div class="card-icon">🧾</div> 
+        <h3>Gestão de Logs</h3> 
+        <p>Visualizar e auditar logs do sistema.</p> 
+      </a>
+
+      <a href="{{ url_for('app_bp.client_goals') }}" class="dash-card">
+        <div class="card-icon">🎯</div>
+        <h3>Metas institucionais</h3>
+        <p>Criar e gerenciar metas estratégicas, táticas e operacionais.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+        <div class="card-icon">📅</div>
+        <h3>Agenda institucional</h3>
+        <p>Gerenciar agenda da empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_demands') }}" class="dash-card">
+        <div class="card-icon">🗂️</div>
+        <h3>Demandas</h3>
+        <p>Cadastro e acompanhamento de demandas.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_collaborators') }}" class="dash-card">
+        <div class="card-icon">👥</div>
+        <h3>Colaboradores</h3>
+        <p>Gerenciar colaboradores vinculados à sua empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_sectors') }}" class="dash-card">
+        <div class="card-icon">🚀</div>
+        <h3>Setores</h3>
+        <p>Gerenciar setores da sua empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.my_demands') }}" class="dash-card">
+        <div class="card-icon">📈</div>
+        <h3>Organizar Vida Profissional</h3>
+        <p>Ferramentas para organizar sua vida profissional.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.personal_demands') }}" class="dash-card">
+        <div class="card-icon">📝</div>
+        <h3>Demandas Pessoais</h3>
+        <p>Página privada para suas demandas pessoais.</p>
+      </a>
+
+    {% endif %}
+
+    <!-- Sessão Cliente Administrativo (cliente_adm) -->
+    {% if current_user.is_cliente_adm() %}
+
+      <a href="{{ url_for('app_bp.client_goals') }}" class="dash-card">
+        <div class="card-icon">🎯</div>
+        <h3>Metas institucionais</h3>
+        <p>Criar e gerenciar metas estratégicas, táticas e operacionais.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+        <div class="card-icon">📅</div>
+        <h3>Agenda institucional</h3>
+        <p>Gerenciar agenda da empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_demands') }}" class="dash-card">
+        <div class="card-icon">🗂️</div>
+        <h3>Demandas</h3>
+        <p>Cadastro e acompanhamento de demandas.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_collaborators') }}" class="dash-card">
+        <div class="card-icon">👥</div>
+        <h3>Colaboradores</h3>
+        <p>Gerenciar colaboradores vinculados à sua empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_sectors') }}" class="dash-card">
+        <div class="card-icon">🚀</div>
+        <h3>Setores</h3>
+        <p>Gerenciar setores da sua empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.my_demands') }}" class="dash-card">
+        <div class="card-icon">📈</div>
+        <h3>Organizar Vida Profissional</h3>
+        <p>Ferramentas para organizar sua vida profissional.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.personal_demands') }}" class="dash-card">
+        <div class="card-icon">📝</div>
+        <h3>Demandas Pessoais</h3>
+        <p>Página privada para suas demandas pessoais.</p>
+      </a>
+
+      {% endif %}
+
+    <!-- Sessão Cliente (cliente) -->
+    {% if current_user.is_cliente() %}
+
+      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+        <div class="card-icon">📅</div>
+        <h3>Agenda institucional</h3>
+        <p>Gerenciar agenda da empresa.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.client_goals') }}" class="dash-card">
+        <div class="card-icon">🎯</div>
+        <h3>Metas institucionais</h3>
+        <p>Verificar metas institucionais da Organização.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.my_demands') }}" class="dash-card">
+        <div class="card-icon">📈</div>
+        <h3>Organizar Vida Profissional</h3>
+        <p>Ferramentas para organizar sua vida profissional.</p>
+      </a>
+
+      <a href="{{ url_for('app_bp.personal_demands') }}" class="dash-card">
+        <div class="card-icon">📝</div>
+        <h3>Demandas Pessoais</h3>
+        <p>Página privada para suas demandas pessoais.</p>
+      </a>
+    {% endif %}
+
+    <!-- Caso não tenha acesso a nada -->
+    {% if not (current_user.is_admin() or current_user.is_funcionario() or current_user.is_cliente_adm() or current_user.is_cliente()) %}
+      <div class="dash-card disabled">
+        <div class="card-icon">🔒</div>
+        <h3>Acesso Restrito</h3>
+        <p>Você não possui permissões configuradas.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if demand else 'Nova' }} Demanda - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>{{ 'Editar' if demand else 'Nova' }} Demanda</h1>
+
+  <form method="POST">
+    <label for="title">Título</label>
+    <input type="text" id="title" name="title" value="{{ demand.title if demand else '' }}" required>
+
+    <label for="description">Descrição</label>
+    <textarea id="description" name="description">{{ demand.description if demand else '' }}</textarea>
+
+    <label for="status">Status</label>
+    <select id="status" name="status">
+      <option value="Pendente" {% if demand and demand.status == "Pendente" %}selected{% endif %}>Pendente</option>
+      <option value="Em andamento" {% if demand and demand.status == "Em andamento" %}selected{% endif %}>Em andamento</option>
+      <option value="Concluída" {% if demand and demand.status == "Concluída" %}selected{% endif %}>Concluída</option>
+    </select>
+
+    <label for="organization_id">Organização</label>
+    <select id="organization_id" name="organization_id">
+      <option value="">-- Nenhuma --</option>
+      {% for org in organizations %}
+        <option value="{{ org.id }}" {% if demand and demand.organization_id == org.id %}selected{% endif %}>{{ org.name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn">{{ 'Salvar alterações' if demand else 'Criar demanda' }}</button>
+  </form>
+</div>
+{% endblock %}

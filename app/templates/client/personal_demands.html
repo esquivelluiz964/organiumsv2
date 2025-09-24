@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Minhas Demandas Pessoais - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Minhas Demandas Pessoais</h1>
+
+  <div class="actions">
+    <p> 🏛 ORGANIZAÇÕES </p>
+    <a href="{{ url_for('app_bp.organizations_list') }}" class="btn">👁 Organizações cadastradas</a>
+    <a href="{{ url_for('app_bp.organizations_new') }}" class="btn">+ Nova Organização</a>
+  </div>
+  <div class="actions">
+    <p> 🍱 LAZER </p>
+    <a href="{{ url_for('app_bp.leisure_list') }}" class="btn">👁 Lazeres cadastrados</a>
+    <a href="{{ url_for('app_bp.leisure_new') }}" class="btn">+ Novo Lazer</a>
+  </div>
+  <div class="actions">
+    <p> 💌 DEMANDAS </p>
+    <a href="{{ url_for('app_bp.personal_demands_new') }}" class="btn">+ Nova Demanda</a>
+  </div>
+
+  {% if demands %}
+  <table class="client-table">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Criada em</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for demand in demands %}
+      <tr>
+        <td>{{ demand.title }}</td>
+        <td>{{ demand.description or "-" }}</td>
+        <td>{{ demand.status or "Pendente" }}</td>
+        <td>{{ demand.created_at.strftime("%d/%m/%Y") if demand.created_at else "-" }}</td>
+        <td>
+          <a href="{{ url_for('app_bp.personal_demands_delete', id=demand.id) }}" class="btn btn-small" onclick="return confirm('Deseja excluir esta demanda?');">Excluir</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty-state">Você ainda não tem demandas pessoais.</p>
+  {% endif %}
+</div>
+{% endblock %}

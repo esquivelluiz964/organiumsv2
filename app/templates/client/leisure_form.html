@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Novo Lazer - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Criar Lazer</h1>
+  <form method="POST">
+    <label>Título</label>
+    <input type="text" name="title" required>
+
+    <label>Descrição</label>
+    <textarea name="description"></textarea>
+
+    <label>Organização</label>
+    <select name="organization_id">
+      <option value="">-- Nenhuma --</option>
+      {% for org in organizations %}
+        <option value="{{ org.id }}">{{ org.name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+{% endblock %}

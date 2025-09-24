@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Registrar{% endblock %}
+{% block content %}
+
+<h2>Registrar</h2>
+
+<form method="post" enctype="multipart/form-data">
+  <label>Username<br>
+    <input type="text" name="username" required placeholder="Escolha um nome de usuário">
+  </label><br>
+
+  <label>Nome completo<br>
+    <input type="text" name="name" required placeholder="Seu nome completo">
+  </label><br>
+
+  <label>Email<br>
+    <input type="email" name="email" required placeholder="seu@email.com">
+  </label><br>
+
+  <label>Senha<br>
+    <input type="password" name="password" required placeholder="Senha segura">
+  </label><br>
+
+  <label>Empresa (opcional)<br>
+    <input type="text" name="company" value="" placeholder="Nome da sua empresa">
+  </label>
+
+  <label>Avatar (opcional)<br>
+    <input type="file" name="avatar" accept="image/*">
+  </label><br>
+
+  <button type="submit">Criar conta</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Nova Organização - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Criar Organização</h1>
+  <form method="POST">
+    <label>Título</label>
+    <input type="text" name="title" required>
+
+    <label>Descrição</label>
+    <textarea name="description"></textarea>
+
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+{% endblock %}

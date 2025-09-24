@@ -1,0 +1,56 @@
+.chat-box {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f4f6f8;
+    border-radius: 8px;
+}
+
+/* Mensagem padrão */
+.chat-msg {
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    max-width: 70%;
+    position: relative;
+    word-wrap: break-word;
+}
+
+/* Mensagens do usuário logado */
+.msg-self {
+    background: #00bfa6;
+    color: #fff;
+    margin-left: auto;
+    text-align: right;
+}
+
+/* Mensagens de outros */
+.msg-other {
+    background: #fff;
+    color: #333;
+    margin-right: auto;
+    border: 1px solid #ddd;
+}
+
+/* Autor */
+.chat-author {
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+}
+
+/* Texto */
+.chat-text {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Timestamp */
+.timestamp {
+    font-size: 0.75rem;
+    color: rgba(0,0,0,0.6);
+    margin-top: 0.3rem;
+    display: block;
+}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Agenda Institucional - Organiums{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container client-section">
+    <div class="calendar-header">
+        <h1>📅 Agenda Institucional</h1>
+        <div class="calendar-actions">
+            <button class="btn-primary" onclick="openEventModal()">
+                + Novo Evento
+            </button>
+            <div class="view-selector">
+                <button class="btn-view active" data-view="month">Mês</button>
+                <button class="btn-view" data-view="week">Semana</button>
+                <button class="btn-view" data-view="day">Dia</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="calendar-container">
+        <div class="calendar-nav">
+            <button id="prevBtn" class="nav-btn">‹</button>
+            <h2 id="currentMonth">Setembro 2025</h2>
+            <button id="nextBtn" class="nav-btn">›</button>
+        </div>
+        
+        <div class="calendar" id="calendar">
+            <!-- O calendário será renderizado via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Criar/Editar Evento -->
+<div id="eventModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEventModal()">&times;</span>
+        <h2 id="modalTitle">Novo Evento</h2>
+        <form id="eventForm">
+            <input type="hidden" id="eventId">
+            
+            <div class="form-group">
+                <label for="eventTitle">Título *</label>
+                <input type="text" id="eventTitle" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="eventDescription">Descrição</label>
+                <textarea id="eventDescription" rows="3"></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="eventStart">Início *</label>
+                    <input type="datetime-local" id="eventStart" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventEnd">Fim</label>
+                    <input type="datetime-local" id="eventEnd">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="eventResponsavel">Responsável</label>
+                    <select id="eventResponsavel">
+                        <option value="">Selecionar...</option>
+                        {% for collab in collaborators %}
+                        <option value="{{ collab.id }}">{{ collab.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="eventSetor">Setor</label>
+                    <select id="eventSetor">
+                        <option value="">Selecionar...</option>
+                        {% for sector in sectors %}
+                        <option value="{{ sector.id }}">{{ sector.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="eventColor">Cor do Evento</label>
+                <div class="color-picker">
+                    <input type="color" id="eventColor" value="#3b82f6">
+                    <span id="colorValue">#3b82f6</span>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeEventModal()">Cancelar</button>
+                <button type="submit" class="btn-primary">Salvar</button>
+                <button type="button" id="deleteBtn" class="btn-danger" style="display: none;">Excluir</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block include_js %}
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+<script>
+// Dados iniciais
+const eventsData = [
+    {% for event in events %}
+    {
+        id: {{ event.id }},
+        title: "{{ event.title }}",
+        description: "{{ event.description or '' }}",
+        start: "{{ event.start_at.isoformat() if event.start_at else '' }}",
+        end: "{{ event.end_at.isoformat() if event.end_at else '' }}",
+        responsavel: {{ event.responsavel_id or 'null' }},
+        setor: {{ event.setor_id or 'null' }},
+        color: "{{ event.cor or '#3b82f6' }}"
+    },
+    {% endfor %}
+];
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    window.calendarManager = new CalendarManager(eventsData);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+.hero-blog, .blog-hero {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.blog-list {
+  max-width: 900px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+}
+
+.blog-card {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.blog-card h2 {
+  margin-bottom: var(--spacing-xs);
+  color: var(--brand-dark);
+}
+
+.blog-card a {
+  text-decoration: none;
+  color: var(--brand-primary);
+}
+
+.blog-card small {
+  display: block;
+  margin-top: var(--spacing-xs);
+  color: var(--muted);
+}
+
+.blog-content {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+  line-height: 1.6;
+  color: var(--fg);
+}

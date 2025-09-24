@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket #{{ ticket.id }} - Admin{% endblock %}
+
+{% block content %}
+<h1>Ticket #{{ ticket.id }} - {{ ticket.titulo }}</h1>
+
+<p><strong>Status:</strong> {{ ticket.status }}</p>
+<p><strong>Criado em:</strong> {{ ticket.criado_em.strftime('%d/%m/%Y %H:%M') }}</p>
+<p><strong>Usuário:</strong> {{ ticket.usuario.name if ticket.usuario else 'Anônimo' }}</p>
+
+<h2>Descrição</h2>
+<p>{{ ticket.descricao }}</p>
+
+<form action="" method="POST">
+    <label for="status">Atualizar Status</label>
+    <select id="status" name="status">
+        <option value="Aberto" {% if ticket.status == 'Aberto' %}selected{% endif %}>Aberto</option>
+        <option value="Em andamento" {% if ticket.status == 'Em andamento' %}selected{% endif %}>Em andamento</option>
+        <option value="Fechado" {% if ticket.status == 'Fechado' %}selected{% endif %}>Fechado</option>
+    </select>
+    <button type="submit">Atualizar</button>
+</form>
+
+<!-- Botão para abrir chat -->
+<a href="{{ url_for('app_bp.ajuda_ticket', ticket_id=ticket.id) }}" class="btn-primary">
+    Abrir Chat
+</a>
+
+<a href="{{ url_for('app_bp.admin_ajuda') }}" class="btn-primary">Voltar</a>
+{% endblock %}

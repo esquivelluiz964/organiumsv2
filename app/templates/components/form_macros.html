@@ -1,0 +1,14 @@
+{% macro input(name, label='', type='text', value='', required=False) -%}
+  <label>{{ label }}<br><input name="{{ name }}" type="{{ type }}" value="{{ value }}" {% if required %}required{% endif %}></label>
+{%- endmacro %}
+
+{% macro table(headers, rows) -%}
+  <table>
+    <thead><tr>{% for h in headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>{% for c in r %}<td>{{ c }}</td>{% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{%- endmacro %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Meus lazeres - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Meus lazeres</h1>
+  <a href="{{ url_for('app_bp.leisure_new') }}" class="btn">+ Novo Lazer</a>
+  <ul class="client-list">
+    {% for lazer in leisures %}
+      <li>
+        <strong>{{ lazer.name }}</strong> - {{ lazer.description or "-" }}
+      </li>
+    {% else %}
+      <p class="empty-state">Você ainda não criou lazeres.</p>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

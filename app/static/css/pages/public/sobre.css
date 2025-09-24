@@ -1,0 +1,91 @@
+/* HERO */
+.hero-about {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-about h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-about p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* MISSÃO E VISÃO */
+.mission-vision {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--spacing-xl);
+}
+
+.mv-block {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.mv-block h2 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--brand-dark);
+}
+
+.mv-block p {
+  color: var(--muted);
+}
+
+@media (min-width: 768px) {
+  .mission-vision {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* VALORES */
+.values {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.values h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.values-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
+}
+
+.value {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.value h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--brand-primary);
+}
+
+.value p {
+  color: var(--muted);
+}
+
+@media (min-width: 768px) {
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

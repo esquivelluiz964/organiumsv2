@@ -1,0 +1,64 @@
+/* HERO */
+.hero-faq {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-faq h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-faq p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* FAQ */
+.faq-section {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+}
+
+.faq-item {
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  background: var(--bg-light);
+}
+
+.faq-question {
+  width: 100%;
+  padding: var(--spacing-md);
+  text-align: left;
+  background: var(--brand-primary);
+  color: white;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.faq-question:hover {
+  background: var(--brand-dark);
+}
+
+.faq-answer {
+  padding: var(--spacing-md);
+  display: none;
+  color: var(--fg);
+  line-height: 1.6;
+  background: var(--bg-light);
+  border-top: 1px solid var(--muted-light);
+}
+
+/* CTA final reaproveita home.css */

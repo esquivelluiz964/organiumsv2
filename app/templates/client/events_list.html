@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Eventos - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Eventos</h1>
+  {% if events %}
+  <table class="client-table">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Descrição</th>
+        <th>Início</th>
+        <th>Fim</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.title }}</td>
+        <td>{{ event.description or "-" }}</td>
+        <td>{{ event.start_at.strftime("%d/%m/%Y %H:%M") if event.start_at else "-" }}</td>
+        <td>{{ event.end_at.strftime("%d/%m/%Y %H:%M") if event.end_at else "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty-state">Nenhum evento cadastrado.</p>
+  {% endif %}
+</div>
+{% endblock %}

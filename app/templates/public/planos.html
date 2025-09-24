@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}Planos - Organiums{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-plans">
+
+    <div class="hero-plans-content">
+
+        <h1>Escolha o plano ideal para sua empresa</h1>
+
+        <p>Flexibilidade e escalabilidade para atender desde pequenas equipes até grandes corporações.</p>
+
+    </div>
+
+</section>
+
+<!-- TABELA DE PLANOS -->
+<section class="plans-section">
+
+    <h2>Nossos Planos</h2>
+
+    <div class="plans-grid">
+
+
+        <!-- Plano Básico -->
+
+        <div class="plan-card">
+
+            <h3>Básico</h3>
+
+            <p class="plan-price">R$99/mês</p>
+
+            <ul>
+
+                <li>✅ Organização pessoal simplificada</li>
+
+                <li>✅ Gestão de tarefas e metas</li>
+
+                <li>✅ Suporte por e-mail</li>
+
+            </ul>
+
+            <a href="/contato" class="btn-primary">Assinar Básico</a>
+
+        </div>
+
+
+        <!-- Plano Profissional -->
+
+        <div class="plan-card featured">
+
+            <h3>Profissional</h3>
+
+            <p class="plan-price">R$199/mês</p>
+
+            <ul>
+
+                <li>✅ Tudo do Básico</li>
+
+                <li>✅ Integração com sistemas corporativos</li>
+
+                <li>✅ Relatórios de produtividade</li>
+
+                <li>✅ Suporte prioritário</li>
+
+            </ul>
+
+            <a href="/contato" class="btn-primary">Assinar Profissional</a>
+
+        </div>
+
+
+        <!-- Plano Enterprise -->
+
+        <div class="plan-card">
+
+            <h3>Enterprise</h3>
+
+            <p class="plan-price">Sob consulta</p>
+
+            <ul>
+
+                <li>✅ Tudo do Profissional</li>
+
+                <li>✅ Implementação personalizada</li>
+
+                <li>✅ Treinamentos para equipes</li>
+
+                <li>✅ Suporte dedicado 24/7</li>
+
+            </ul>
+
+            <a href="/contato" class="btn-primary">Assinar Enterprise</a>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+
+    <h2>Pronto para escolher o melhor plano?</h2>
+
+    <a href="/contato" class="btn-primary">Fale com a gente</a>
+
+</section>
+
+{% endblock %}

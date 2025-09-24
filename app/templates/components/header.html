@@ -1,0 +1,65 @@
+<header class="site-header">
+
+  <div class="header-wrap">
+
+    <a class="brand" href="{{ url_for('app_bp.home') }}">
+      <img class="brand-logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="Organiums" width="32" height="32">
+      Organiums
+    </a>
+
+    <nav class="desktop-nav">
+      <a class="nav-link" href="{{ url_for('app_bp.home') }}">Home</a>
+      <a class="nav-link" href="{{ url_for('app_bp.about') }}">Sobre</a>
+
+      {% if current_user.is_authenticated %}
+        <a class="nav-link" href="{{ url_for('app_bp.dashboard') }}">Dashboard</a>
+
+        <div class="user-menu">
+          {% if current_user.avatar %}
+            <img src="{{ current_user.avatar }}" alt="Avatar de {{ current_user.name }}" width="32" height="32" class="user-avatar">
+          {% else %}
+            <div class="user-avatar placeholder-avatar">{{ current_user.name[0]|upper }}</div>
+          {% endif %}
+          <div class="user-dropdown">
+            <span class="user-info">{{ current_user.name }}</span>
+            <a class="nav-link" href="{{ url_for('app_bp.profile') }}">Perfil</a>
+            <a class="nav-link" href="{{ url_for('app_bp.settings') }}">Configurações</a>
+            <a class="nav-link" href="{{ url_for('app_bp.logout') }}">Sair</a>
+          </div>
+        </div>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('app_bp.login') }}">Entrar</a>
+        <a class="nav-link" href="{{ url_for('app_bp.register') }}">Cadastrar</a>
+      {% endif %}
+    </nav>
+
+    <button class="mobile-nav-toggle" aria-label="Abrir menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6H20M4 12H20M4 18H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-nav">
+    <button class="close-mobile-nav" aria-label="Fechar menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <a class="nav-link" href="{{ url_for('app_bp.home') }}">Home</a>
+    <a class="nav-link" href="{{ url_for('app_bp.about') }}">Sobre</a>
+
+    {% if current_user.is_authenticated %}
+      <a class="nav-link" href="{{ url_for('app_bp.dashboard') }}">Dashboard</a>
+      <a class="nav-link" href="{{ url_for('app_bp.profile') }}">Perfil</a>
+      <a class="nav-link" href="{{ url_for('app_bp.settings') }}">Configurações</a>
+      <a class="nav-link" href="{{ url_for('app_bp.logout') }}">Sair</a>
+    {% else %}
+      <a class="nav-link" href="{{ url_for('app_bp.login') }}">Entrar</a>
+      <a class="nav-link" href="{{ url_for('app_bp.register') }}">Cadastrar</a>
+    {% endif %}
+
+  </div>
+
+</header>

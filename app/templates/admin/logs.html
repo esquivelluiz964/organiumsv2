@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Auditoria & Logs{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_logs.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="logs-container">
+  <h2>Auditoria & Logs</h2>
+  <p class="subtitle">Últimas ações realizadas pelos usuários do sistema.</p>
+
+  <table class="logs-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuário</th>
+        <th>Ação</th>
+        <th>IP</th>
+        <th>Status</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.id }}</td>
+        <td>{{ log.user.username if log.user else "Anônimo" }}</td>
+        <td>{{ log.action }}</td>
+        <td>{{ log.ip_address }}</td>
+        <td>
+          <span class="status {{ 'error' if log.status == 'fail' else 'ok' }}">
+            {{ log.status }}
+          </span>
+        </td>
+        <td>{{ log.created_at.strftime("%d/%m/%Y %H:%M:%S") }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6">Nenhum log registrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

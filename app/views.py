@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
-from models import User, Contato, BlogPost, Ticket, Mensagem, Log, Company, Goal, Event, Demand, Collaborator, PersonalDemand, Organization, Leisure, Plan, Objective, Sector, DemandKanban, KanbanCard, KanbanColumn
+from models import User, Contato, BlogPost, Ticket, Mensagem, Log, Company, Goal, Event, Demand, Collaborator, PersonalDemand, Organization, Leisure, Plan, Objective, Sector, DemandKanban, KanbanCard, KanbanColumn, Event
 from manage import db, login
 import os
 from werkzeug.utils import secure_filename
@@ -1012,13 +1012,188 @@ def client_events():
     register_log("Acesso: cliente_adm - events")
     return render_template('client/events_list.html', events=events)
 
-@bp.route('/client/professional')
+@bp.route('/client/calendar')
 @login_required
-def client_professional():
-    if not current_user.is_cliente_adm() and not current_user.is_admin() and not current_user.is_cliente():
-            abort(403)
-    register_log("Acesso: cliente - organizar profissional")
-    return render_template('client/professional.html')
+def client_calendar():
+    if not current_user.is_cliente_adm() and not current_user.is_admin():
+        abort(403)
+    
+    events = Event.query.filter_by(company_id=current_user.company_id).order_by(Event.start_at.asc()).all()
+    collaborators = Collaborator.query.filter_by(company_id=current_user.company_id).all()
+    sectors = Sector.query.filter_by(company_id=current_user.company_id).all()
+    
+    register_log("Acesso: cliente_adm - calendar")
+    return render_template('client/calendar.html', 
+                         events=events,
+                         collaborators=collaborators,
+                         sectors=sectors)
+
+# ROTAS API PARA CRUD
+@bp.route('/api/events', methods=['POST'])
+@login_required
+def create_event():
+    if not current_user.is_cliente_adm() and not current_user.is_admin():
+        return jsonify({'error': 'Não autorizado'}), 403
+    
+    data = request.get_json()
+    
+    event = Event(
+        company_id=current_user.company_id,
+        title=data['title'],
+        description=data.get('description'),
+        start_at=datetime.fromisoformat(data['start_at']),
+        end_at=datetime.fromisoformat(data['end_at']) if data.get('end_at') else None,
+        responsavel_id=data.get('responsavel_id'),
+        setor_id=data.get('setor_id'),
+        cor=data.get('cor', '#3b82f6'),
+        tipo=data.get('tipo', 'evento')
+    )
+    
+    db.session.add(event)
+    db.session.commit()
+    
+    return jsonify({'success': True, 'event': {
+        'id': event.id,
+        'title': event.title,
+        'start': event.start_at.isoformat(),
+        'end': event.end_at.isoformat() if event.end_at else None,
+        'color': event.cor
+    }})
+
+@bp.route('/api/events/<int:event_id>', methods=['PUT'])
+@login_required
+def update_event(event_id):
+    event = Event.query.filter_by(id=event_id, company_id=current_user.company_id).first_or_404()
+    
+    data = request.get_json()
+    event.title = data['title']
+    event.description = data.get('description')
+    event.start_at = datetime.fromisoformat(data['start_at'])
+    event.end_at = datetime.fromisoformat(data['end_at']) if data.get('end_at') else None
+    event.responsavel_id = data.get('responsavel_id')
+    event.setor_id = data.get('setor_id')
+    event.cor = data.get('cor', event.cor)
+    
+    db.session.commit()
+    
+    return jsonify({'success': True})
+
+@bp.route('/api/events/<int:event_id>', methods=['DELETE'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.filter_by(id=event_id, company_id=current_user.company_id).first_or_404()
+    
+    db.session.delete(event)
+    db.session.commit()
+    
+    return jsonify({'success': True})
+
+# Página para organizar demandas profissionais
+@bp.route('/my-demands')
+@login_required
+def my_demands():
+    """Painel individual onde usuário vê apenas demandas relacionadas a ele"""
+    
+    # Buscar quadros kanban da empresa do usuário
+    kanban_boards = DemandKanban.query.filter_by(company_id=current_user.company_id).all()
+    
+    # Para cada quadro, filtrar apenas cards onde o usuário está envolvido
+    filtered_boards = []
+    for board in kanban_boards:
+        # Criar uma cópia "filtrada" do quadro
+        filtered_board = {
+            'id': board.id,
+            'name': board.name,
+            'description': board.description,
+            'columns': []
+        }
+        
+        for column in sorted(board.columns, key=lambda c: c.position):
+            # Filtrar cards: onde o usuário é responsável OU criador
+            filtered_cards = []
+            for card in column.cards:
+                # Verificar se o usuário está envolvido no card
+                is_responsible = (card.quem_fazer_id and 
+                                 card.responsavel and 
+                                 card.responsavel.user_id == current_user.id)
+                is_creator = (card.created_by == current_user.id)
+                
+                if is_responsible or is_creator:
+                    # Converter o card para dicionário serializável
+                    card_dict = {
+                        'id': card.id,
+                        'title': card.title,
+                        'description': card.description,
+                        'o_que_fazer': card.o_que_fazer,
+                        'onde_fazer': card.onde_fazer,
+                        'prazo': card.prazo.isoformat() if card.prazo else None,
+                        'gravidade': card.gravidade,
+                        'urgencia': card.urgencia,
+                        'tendencia': card.tendencia,
+                        'position': card.position,
+                        'created_by': card.created_by,
+                        'created_at': card.created_at.isoformat(),
+                        'column_id': column.id
+                    }
+                    
+                    # Adicionar informações do responsável se existir
+                    if card.responsavel:
+                        card_dict['responsavel'] = {
+                            'id': card.responsavel.id,
+                            'name': card.responsavel.name,
+                            'user_id': card.responsavel.user_id
+                        }
+                    else:
+                        card_dict['responsavel'] = None
+                    
+                    # Adicionar informações do setor se existir
+                    if card.setor:
+                        card_dict['setor'] = {
+                            'id': card.setor.id,
+                            'name': card.setor.name
+                        }
+                    else:
+                        card_dict['setor'] = None
+                    
+                    # Adicionar informações do criador
+                    card_dict['criador'] = {
+                        'id': card.criador.id,
+                        'name': card.criador.name
+                    }
+                    
+                    filtered_cards.append(card_dict)
+            
+            if filtered_cards:  # Só incluir coluna se tiver cards relevantes
+                filtered_column = {
+                    'id': column.id,
+                    'name': column.name,
+                    'color': column.color,
+                    'position': column.position,
+                    'cards': filtered_cards
+                }
+                filtered_board['columns'].append(filtered_column)
+        
+        if filtered_board['columns']:  # Só incluir quadro se tiver colunas com cards
+            filtered_boards.append(filtered_board)
+    
+    collaborators = Collaborator.query.filter_by(company_id=current_user.company_id).all()
+    sectors = Sector.query.filter_by(company_id=current_user.company_id).all()
+
+    # Converter collaborators e sectors para dados serializáveis
+    collaborators_data = [
+        {"id": c.id, "name": c.name, "user_id": c.user_id} 
+        for c in collaborators
+    ]
+    sectors_data = [
+        {"id": s.id, "name": s.name} 
+        for s in sectors
+    ]
+
+    register_log("Acesso: visão individual de demandas")
+    return render_template('client/my_demands.html', 
+                         kanban_boards=filtered_boards,
+                         collaborators=collaborators_data,
+                         sectors=sectors_data)
 
 # Página de demandas pessoais
 @bp.route("/client/personal-demands")

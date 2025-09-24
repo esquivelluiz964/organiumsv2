@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Página não encontrada - Organiums{% endblock %}
+
+{% block content %}
+<div class="error-container">
+  <div class="error-card">
+    <h1> {{ code_error }} </h1>
+    <p> {{ detalhe_error }} </p>
+    <a href="{{ url_for('app_bp.home') }}" class="btn">Voltar para o início</a>
+  </div>
+</div>
+{% endblock %}

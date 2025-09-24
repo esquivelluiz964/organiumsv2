@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Colaboradores - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Colaboradores</h1>
+  <button data-action="create" data-type="collaborator">Novo Colaborador</button>
+
+  {% if collaborators %}
+  <table class="client-table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Função</th>
+        <th>Setor</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in collaborators %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.email or '-' }}</td>
+        <td>{{ c.role or '-' }}</td>
+        <td>{{ c.sector.name if c.sector else '-' }}</td>
+        <td>
+          <button data-action="edit" data-type="collaborator" data-id="{{ c.id }}" data-title="{{ c.name }}" data-description="{{ c.email }}" data-role="{{ c.role }}" data-sector-id="{{ c.sector_id or '' }}">Editar</button>
+          <form action="{{ url_for('app_bp.delete_collaborator', collab_id=c.id) }}" method="POST" style="display:inline;">
+            <button type="submit" onclick="return confirm('Excluir colaborador?')">Excluir</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Nenhum colaborador cadastrado.</p>
+  {% endif %}
+</div>
+
+<script>
+  // passar os setores para o JS
+  window.sectorsData = {{ sectors|tojson }};
+</script>
+{% endblock %}

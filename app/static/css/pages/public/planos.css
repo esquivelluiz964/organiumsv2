@@ -1,0 +1,87 @@
+/* HERO */
+.hero-plans {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-plans h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-plans p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* PLANOS */
+.plans-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.plans-section h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.plans-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
+}
+
+.plan-card {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.plan-card.featured {
+  border: 2px solid var(--brand-primary);
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+}
+
+.plan-card h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--brand-dark);
+}
+
+.plan-price {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--brand-primary);
+}
+
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.plan-card li {
+  padding: var(--spacing-xs) 0;
+  color: var(--muted);
+}
+
+/* CTA final reaproveita home.css */
+
+@media (min-width: 768px) {
+  .plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

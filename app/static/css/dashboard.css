@@ -1,0 +1,63 @@
+.dashboard-container {
+  max-width: var(--container-width);
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-lg);
+}
+
+.dashboard-container h2 {
+  color: var(--fg);
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.8rem;
+}
+
+.dashboard-container .muted {
+  color: var(--muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.dash-card {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--fg);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dash-card:hover {
+  background: var(--brand-primary);
+  color: #fff;
+  transform: translateY(-4px);
+}
+
+.dash-card .card-icon {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.dash-card h3 {
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.2rem;
+}
+
+.dash-card p {
+  font-size: 0.9rem;
+  color: inherit;
+}
+
+.dash-card.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+  box-shadow: none;
+}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Admin - Blog{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/private/blog.css') }}">
+
+<section class="admin-section">
+    <div class="admin-header">
+        <h1>Gerenciar Posts</h1>
+        <a href="{{ url_for('app_bp.admin_blog_novo') }}" class="btn btn-primary">+ Novo Post</a>
+    </div>
+
+    {% if posts %}
+        <table class="blog-table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Resumo</th>
+                    <th>Autor</th>
+                    <th>Criado em</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ post.titulo }}</td>
+                        <td>{{ post.resumo or "-" }}</td>
+                        <td>{{ post.autor.name }}</td>
+                        <td>{{ post.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum post criado ainda.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

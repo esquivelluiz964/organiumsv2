@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Contato - Organiums{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-contact">
+
+    <div class="hero-contact-content">
+
+        <h1>Fale com a gente</h1>
+
+        <p>Tem dúvidas ou quer agendar uma demonstração? Preencha o formulário abaixo e entraremos em contato.</p>
+
+    </div>
+
+</section>
+
+<!-- FORMULÁRIO -->
+<section class="contact-form-section">
+
+    <form action="/contato" method="POST" class="contact-form">
+    
+
+        <label for="name">Nome</label>
+
+        <input type="text" id="name" name="name" placeholder="Seu nome" required>
+
+
+        <label for="email">E-mail</label>
+
+        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+
+
+        <label for="empresa">Empresa</label>
+
+        <input type="text" id="empresa" name="empresa" placeholder="Nome da empresa">
+
+
+        <label for="mensagem">Mensagem</label>
+
+        <textarea id="mensagem" name="mensagem" placeholder="Escreva sua mensagem" rows="5" required></textarea>
+
+
+        <button type="submit">Enviar mensagem</button>
+
+    </form>
+
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+
+    <h2>Ou fale conosco diretamente pelo e-mail</h2>
+
+    <a href="mailto:organiums@gmail.com" class="btn-primary">organiums@gmail.com</a>
+
+</section>
+
+{% endblock %}

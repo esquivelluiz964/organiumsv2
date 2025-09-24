@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Meu Perfil{% endblock %}
+{% block content %}
+<div class="private-container">
+  <h2>Meu Perfil</h2>
+  <div class="profile-card">
+    <div class="profile-avatar">
+      {% if current_user.avatar %}
+        <img src="{{ current_user.avatar }}" alt="Avatar">
+      {% else %}
+        <span>{{ current_user.name[0]|upper }}</span>
+      {% endif %}
+    </div>
+    <div class="profile-info">
+      <p><strong>Tipo:</strong> {{ current_user.role }}</p>
+      <p><strong>Usuário:</strong> {{ current_user.username }}</p>
+      <p><strong>Nome:</strong> {{ current_user.name }}</p>
+      <p><strong>Email:</strong> {{ current_user.email }}</p>
+    </div>
+  </div>
+  <a href="{{ url_for('app_bp.settings') }}" class="btn">Editar Configurações</a>
+</div>
+{% endblock %}

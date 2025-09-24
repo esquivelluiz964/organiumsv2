@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Demandas - Organiums{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>Demandas da Empresa</h1>
+  {% if demands %}
+  <table class="client-table">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Criada em</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for demand in demands %}
+      <tr>
+        <td>{{ demand.title }}</td>
+        <td>{{ demand.description or "-" }}</td>
+        <td>{{ demand.status or "Pendente" }}</td>
+        <td>{{ demand.created_at.strftime("%d/%m/%Y") if demand.created_at else "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty-state">Nenhuma demanda registrada.</p>
+  {% endif %}
+</div>
+{% endblock %}

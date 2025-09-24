@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Gestão Estratégica{% endblock %}
+{% block content %}
+<div class="container client-section">
+  <h1>🎯 Gestão de Metas, Objetivos e Planos</h1>
+
+  <div class="crud-grid">
+    {% for level in ['estratégica', 'táticas', 'operacionais'] %}
+      <div class="crud-column">
+        <h2>{{ level|capitalize }}</h2>
+
+        <!-- METAS -->
+        <h3>Metas</h3>
+        <ul>
+          {% for g in goals if g.level == level %}
+            <li>
+              <div>
+                <strong>{{ g.title }}</strong> - {{ g.description or "-" }}
+              </div>
+              {% if current_user.is_cliente_adm() or current_user.is_admin() or current_user.is_funcionario() %}
+              <div class="actions">
+                <button class="btn-edit" data-action="edit" data-type="goal" data-id="{{ g.id }}" data-title="{{ g.title }}" data-description="{{ g.description or '' }}" data-level="{{ level }}">Editar</button>
+                <a href="{{ url_for('app_bp.client_goal_delete', id=g.id) }}" class="btn-delete">Excluir</a>
+              </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+        <button class="btn-add" data-action="create" data-type="goal" data-level="{{ level }}">+ Nova Meta</button>
+
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

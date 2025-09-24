@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Tickets de Ajuda - Admin{% endblock %}
+{% block content %}
+
+<h1>Tickets de Ajuda</h1>
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Título</th>
+
+            <th>Status</th>
+
+            <th>Criado em</th>
+
+            <th>Usuário</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for ticket in tickets %}
+
+        <tr>
+
+            <td>{{ ticket.id }}</td>
+
+            <td>{{ ticket.titulo }}</td>
+
+            <td>{{ ticket.status }}</td>
+
+            <td>{{ ticket.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+
+            <td>{{ ticket.usuario.name if ticket.usuario else 'Anônimo' }}</td>
+
+            <td><a href="{{ url_for('app_bp.admin_ajuda_ticket', ticket_id=ticket.id) }}">Ver/Atualizar</a></td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

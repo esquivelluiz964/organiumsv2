@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Central de Ajuda - Organiums{% endblock %}
+
+{% block content %}
+
+<section class="hero-ajuda">
+
+    <div class="hero-ajuda-content">
+
+        <h1>Central de Ajuda</h1>
+
+        <p>Abra um chamado e nossa equipe entrará em contato rapidamente.</p>
+
+    </div>
+
+</section>
+
+<section class="ajuda-form-section">
+
+    <form action="/ajuda" method="POST" class="contact-form">
+
+        {% if current_user.is_authenticated %}
+            <p>Chamado será aberto como: <strong>{{ current_user.name }}</strong> ({{ current_user.email }})</p>
+            <input type="hidden" name="nome" value="{{ current_user.name }}">
+        {% else %}
+            <label for="nome">Seu Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
+        {% endif %}
+
+        <label for="titulo">Título do Chamado</label>
+
+        <input type="text" id="titulo" name="titulo" placeholder="Resumo do problema" required>
+
+
+        <label for="descricao">Descrição</label>
+
+        <textarea id="descricao" name="descricao" rows="5" placeholder="Descreva seu problema ou dúvida" required></textarea>
+
+
+        <button type="submit">Abrir Chamado</button>
+
+    </form>
+</section>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+/* === LAYOUT PRINCIPAL === */
+.container.client-section {
+  padding: 2rem;
+}
+
+.client-section h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--brand-primary);
+}
+
+/* === GRID === */
+.crud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* === COLUNAS === */
+.crud-column {
+  background: var(--bg-light, #f9f9f9);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.1));
+  display: flex;
+  flex-direction: column;
+}
+
+.crud-column h2 {
+  color: var(--brand-primary, #0056b3);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.crud-column h3 {
+  margin: 1rem 0 0.5rem;
+  color: #444;
+}
+
+/* === LISTAS === */
+.crud-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.crud-column li {
+  background: #fff;
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
+  border-radius: var(--radius, 8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid #eee;
+}
+
+.crud-column li strong {
+  color: #222;
+}
+
+.crud-column li small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* === AÇÕES === */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* === BOTÕES === */
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius, 6px);
+  transition: all 0.2s ease;
+}
+
+.btn-add {
+  background: var(--brand-primary, #0056b3);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+.btn-add:hover {
+  background: #004099;
+}
+
+.btn-edit {
+  background: #eee;
+  padding: 0.4rem 0.8rem;
+}
+
+.btn-edit:hover {
+  background: #ddd;
+}
+
+.btn-delete {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 0.4rem 0.8rem;
+  text-decoration: none;
+}
+
+.btn-delete:hover {
+  background: #f5c6cb;
+}
+
+.btn-submit {
+  background: var(--brand-primary, #0056b3);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn-submit:hover {
+  background: #004099;
+}

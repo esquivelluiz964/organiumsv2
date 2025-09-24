@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Gestão de Usuários{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_usuarios.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="usuarios-container">
+  <h2>Gestão de Usuários</h2>
+  <a href="{{ url_for('app_bp.admin_usuario_novo') }}" class="btn">+ Novo Usuário</a>
+
+<table class="usuarios-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Empresa</th>
+      <th style="min-width:140px;">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in usuarios %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.role }}</td>
+      <td>{{ u.company.name }}</td>
+      <td class="acoes-col">
+        <form action="{{ url_for('app_bp.admin_usuario_editar', user_id=u.id) }}" method="GET" class="inline-form">
+          <button type="submit" class="btn-sm">Editar</button>
+        </form>
+        <form action="{{ url_for('app_bp.admin_usuario_excluir', user_id=u.id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="btn-sm danger" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="7">Nenhum usuário cadastrado.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</div>
+{% endblock %}

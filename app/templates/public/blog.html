@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Blog - Organiums{% endblock %}
+{% block content %}
+
+<section class="hero-blog">
+
+    <div class="hero-blog-content">
+
+        <h1>Blog Organiums</h1>
+
+        <p>Artigos, novidades e dicas para organização pessoal e profissional.</p>
+
+    </div>
+
+</section>
+
+<section class="blog-list">
+
+    {% for post in posts %}
+
+    <article class="blog-card">
+
+        <h2><a href="{{ url_for('app_bp.blog_post', slug=post.slug) }}">{{ post.titulo }}</a></h2>
+
+        {% if post.resumo %}
+
+        <p>{{ post.resumo }}</p>
+
+        {% endif %}
+
+        <small>Publicado em {{ post.criado_em.strftime('%d/%m/%Y') }} por {{ post.autor.name }}</small>
+
+    </article>
+
+    {% else %}
+
+    <p>Nenhum post publicado ainda.</p>
+
+    {% endfor %}
+
+</section>
+
+{% endblock %}

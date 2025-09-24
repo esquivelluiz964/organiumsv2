@@ -1,0 +1,51 @@
+.client-section h1 {
+  margin-bottom: var(--spacing-md);
+  color: var(--brand-primary);
+}
+
+.client-table, .client-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+}
+
+.client-table th, .client-table td {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--bg-light);
+}
+
+.client-list li {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--bg-light);
+}
+
+.btn {
+  background: var(--brand-primary);
+  color: #fff;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background: var(--brand-dark);
+}
+
+.btn-danger {
+  background: #ef4444;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.actions {
+  margin-bottom: var(--spacing-md);
+}
+
+.btn-small {
+  font-size: 0.8rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+

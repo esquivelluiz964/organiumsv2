@@ -1,0 +1,304 @@
+{% include 'partials/seo/structured_data.html' %}
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+  <head>
+
+    <!-- Meta Charset e Viewport (Fundamentais) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Título da Página (Dinâmico - será substituído em outras templates) -->
+    <title>{% block title %}Organiums - Sua Vida Organizada em Todas as Esferas{% endblock %}</title>
+
+    <!-- Descrição Meta (CRUCIAL para SEO e Compartilhamento) -->
+    <meta name="description" content="A Organiums oferece a plataforma definitiva para organização pessoal e profissional. Eleve o bem-estar e a produtividade dos colaboradores da sua empresa.">
+
+    <!-- Palavras-chave (Para SEO) -->
+    <meta name="keywords" content="organização pessoal, produtividade, bem-estar, life organization, empresa, colaboradores, organização, metas, tasks, hábitos">
+
+    <!-- Autor -->
+    <meta name="author" content="Organiums">
+
+    <!-- Open Graph / Facebook (Para um compartilhamento PERFEITO no LinkedIn, WhatsApp, etc.) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url_root }}">
+    <meta property="og:title" content="Organiums - Sua Vida Organizada em Todas as Esferas">
+    <meta property="og:description" content="A plataforma definitiva de organização pessoal para colaboradores das melhores empresas.">
+    <meta property="og:image" content="{{ url_for('static', filename='img/og-image.jpg', _external=True) }}">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.url_root }}">
+    <meta property="twitter:title" content="Organiums - Sua Vida Organizada em Todas as Esferas">
+    <meta property="twitter:description" content="A plataforma definitiva de organização pessoal para colaboradores das melhores empresas.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='img/og-image.jpg', _external=True) }}">
+
+    <!-- Favicon & Apple Touch Icon (IMPRESCINDÍVEL para seriedade) -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+
+    <!-- Canonical URL (Evita conteúdo duplicado para SEO) -->
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Pré-conexão com domínios externos (Para performance) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts (Sugestão: fontes que passem clareza e ordem) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('app_bp.static', filename='css/main.css') }}">
+    {% block include_css %}{% endblock %}
+
+  </head>
+
+  <body>
+  
+    {% include 'components/header.html' %}
+
+    <main class="container">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- MODAL GENÉRICO -->
+    <div id="crudModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <form id="crudForm" method="POST">
+          <input type="hidden" name="level" id="formLevel">
+          <input type="hidden" name="id" id="formId">
+          <div id="formFields"></div>
+          <button type="submit" class="btn-submit">Salvar</button>
+        </form>
+      </div>
+    </div>
+
+    {% include 'components/footer.html' %}
+
+    <script src="{{ url_for('app_bp.static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('app_bp.static', filename='js/components/header.js') }}"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const crudModal = document.getElementById('crudModal');
+  const crudForm = document.getElementById('crudForm');
+  const modalTitle = document.getElementById('modalTitle');
+  const formLevel = document.getElementById('formLevel');
+  const formId = document.getElementById('formId');
+  const formFields = document.getElementById('formFields');
+
+  // Helper: garante que temos um array de setores
+  const getSectors = () => (Array.isArray(window.sectorsData) ? window.sectorsData : []);
+
+  // Helper: escapando para atributos/HTML simples
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function ucfirst(s) {
+    return s && s.length ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  }
+
+  // Função para extrair todos os data attributes de um elemento
+  function getAllDataAttributes(element) {
+    const data = {};
+    for (const [key, value] of Object.entries(element.dataset)) {
+      // Converte camelCase para snake_case para manter compatibilidade
+      const formattedKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+      data[formattedKey] = value;
+    }
+    return data;
+  }
+
+  // Delegation de eventos para botões com data attributes
+  document.addEventListener('click', function(e) {
+    const target = e.target;
+    
+    // Criar novo item
+    if (target.matches('[data-action="create"][data-type]')) {
+      e.preventDefault();
+      const type = target.dataset.type;
+      const level = target.dataset.level || '';
+      openCreateModal(type, level);
+    }
+    
+    // Editar item existente
+    else if (target.matches('[data-action="edit"][data-type][data-id]')) {
+      e.preventDefault();
+      const type = target.dataset.type;
+      const id = target.dataset.id;
+      const itemData = getAllDataAttributes(target);
+      openEditModal(type, id, itemData);
+    }
+  });
+
+  // Modal de criação
+  window.openCreateModal = function(type, level) {
+    modalTitle.innerText = "Novo " + ucfirst(type);
+    crudForm.action = "/client/" + type + "s/new";
+    if (formLevel) formLevel.value = level || "";
+    if (formId) formId.value = "";
+
+    renderFormFields(type, {});
+    crudModal.classList.add('active');
+  };
+
+  // Modal de edição com data attributes
+  window.openEditModal = function(type, id, itemData = {}) {
+    modalTitle.innerText = "Editar " + ucfirst(type);
+    crudForm.action = "/client/" + type + "s/" + id + "/edit";
+    if (formId) formId.value = id;
+
+    // Mapeia os data attributes para os campos do formulário
+    const data = mapDataAttributesToForm(type, itemData);
+    
+    renderFormFields(type, data);
+    crudModal.classList.add('active');
+  };
+
+  // Fecha modal
+  window.closeModal = function() {
+    crudModal.classList.remove('active');
+  };
+
+  // Mapeia data attributes para campos do formulário
+  function mapDataAttributesToForm(type, itemData) {
+    const data = {};
+    
+    switch (type) {
+      case "plan":
+        data.title = itemData.title || "";
+        data.description = itemData.description || "";
+        data.level = itemData.level || "";
+        data.who = itemData.who || "";
+        data.when = itemData.when || "";
+        data.where = itemData.where || "";
+        break;
+        
+      case "collaborator":
+        // Suporte a ambos os padrões (title/description ou name/email)
+        data.title = itemData.title || itemData.name || "";
+        data.description = itemData.description || itemData.email || "";
+        data.role = itemData.role || "";
+        data.sector_id = itemData.sector_id || itemData.sector || "";
+        break;
+        
+      case "goal":
+      case "sector":
+      case "objective":
+      default:
+        data.title = itemData.title || "";
+        data.description = itemData.description || "";
+        data.level = itemData.level || "";
+        break;
+    }
+    
+    return data;
+  }
+
+  function renderFormFields(type, data) {
+    let html = '';
+
+    switch (type) {
+      case "collaborator":
+        const sectors = getSectors();
+        let options = `<option value="">-- Setor --</option>`;
+        if (sectors.length) {
+          options += sectors.map(s => {
+            const selected = String(s.id) === String(data.sector_id || "") ? 'selected' : '';
+            return `<option value="${escapeHtml(s.id)}" ${selected}>${escapeHtml(s.name)}</option>`;
+          }).join('');
+        }
+        html = `
+          <label>Nome</label>
+          <input type="text" name="title" placeholder="Nome" value="${escapeHtml(data.title)}" required>
+          <label>Email</label>
+          <input type="email" name="description" placeholder="Email" value="${escapeHtml(data.description)}">
+          <label>Função</label>
+          <select name="role">
+            <option value="cliente" ${data.role === "cliente" ? "selected" : ""}>Cliente</option>
+            <option value="cliente_adm" ${data.role === "cliente_adm" ? "selected" : ""}>Cliente ADM</option>
+          </select>
+          <label>Setor</label>
+          <select name="sector_id">${options}</select>
+        `;
+        break;
+        
+      case "plan":
+        html = `
+          <label>Título</label>
+          <input type="text" name="title" placeholder="Título" value="${escapeHtml(data.title)}" required>
+          <label>Descrição</label>
+          <textarea name="description" placeholder="Descrição">${escapeHtml(data.description)}</textarea>
+          <label>Quem</label>
+          <input type="text" name="who" placeholder="Quem" value="${escapeHtml(data.who || '')}" required>
+          <label>Quando</label>
+          <input type="text" name="when" placeholder="Quando" value="${escapeHtml(data.when || '')}" required>
+          <label>Onde</label>
+          <input type="text" name="where" placeholder="Onde" value="${escapeHtml(data.where || '')}" required>
+        `;
+        if (formLevel) {
+          formLevel.value = data.level || "";
+        }
+        break;
+        
+      default:
+        // Campos genéricos para outros tipos
+        html = `
+          <label>Título</label>
+          <input type="text" name="title" placeholder="Título" value="${escapeHtml(data.title)}" required>
+          <label>Descrição</label>
+          <textarea name="description" placeholder="Descrição">${escapeHtml(data.description)}</textarea>
+        `;
+        if (formLevel) {
+          formLevel.value = data.level || "";
+        }
+        break;
+    }
+
+    formFields.innerHTML = html;
+  }
+
+  // Fecha o modal clicando fora do conteúdo
+  window.onclick = function(event) {
+    if (event.target === crudModal) {
+      closeModal();
+    }
+  };
+
+  // Também fecha com a tecla ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && crudModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+});
+    </script>
+    {% block include_js %}{% endblock %}
+
+  </body>
+
+</html>

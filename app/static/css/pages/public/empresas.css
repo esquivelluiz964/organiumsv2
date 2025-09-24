@@ -1,0 +1,94 @@
+/* HERO */
+.hero-enterprise {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-enterprise h1 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-enterprise p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* BENEFÍCIOS CORPORATIVOS */
+.enterprise-benefits {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.enterprise-benefits h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.benefit {
+  background: var(--bg-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.benefit h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--brand-dark);
+}
+
+.benefit p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* DIFERENCIAIS */
+.enterprise-differentials {
+  background: var(--bg-light);
+  padding: var(--spacing-xl) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.enterprise-differentials h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.enterprise-differentials ul {
+  list-style: none;
+  padding: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.enterprise-differentials li {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--muted-light);
+  color: var(--muted);
+}
+
+.enterprise-differentials li:last-child {
+  border-bottom: none;
+}
+
+/* CTA FINAL reaproveita home.css */

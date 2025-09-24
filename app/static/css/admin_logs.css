@@ -1,0 +1,66 @@
+.logs-container {
+  max-width: var(--container-width);
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-lg);
+}
+
+.logs-container h2 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.logs-container .subtitle {
+  color: var(--muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Tabela de logs */
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-light);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.logs-table th,
+.logs-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logs-table th {
+  background: var(--brand-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.logs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.logs-table tr:hover {
+  background: rgba(14, 165, 164, 0.1);
+}
+
+/* Status */
+.status {
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
