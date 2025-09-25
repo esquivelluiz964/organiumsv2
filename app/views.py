@@ -288,6 +288,13 @@ def dashboard():
     register_log("Acesso à página do dashboard")
     return render_template('private/home.html')
 
+# página de entretenimento/lazer
+@bp.route('/entretenimento')
+@login_required
+def entretenimento():
+    register_log("Acesso à página de entretenimento")
+    return render_template('games/entretenimento.html')
+
 # verificar e mudar o perfil na plataforma
 @bp.route('/perfil')
 @login_required
@@ -520,7 +527,7 @@ def admin_logs():
 @bp.route('/client/goals')
 @login_required
 def client_goals():
-    if not current_user.is_cliente_adm() and not current_user.is_admin():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
         abort(403)
 
     goals = Goal.query.filter_by(company_id=current_user.company_id).order_by(Goal.created_at.desc()).all()
@@ -1006,7 +1013,7 @@ def reorder_kanban_cards(column_id):
 @bp.route('/client/events')
 @login_required
 def client_events():
-    if not current_user.is_cliente_adm() and not current_user.is_admin():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
             abort(403)
     events = Event.query.filter_by(company_id=current_user.company_id).all()
     register_log("Acesso: cliente_adm - events")
@@ -1015,7 +1022,7 @@ def client_events():
 @bp.route('/client/calendar')
 @login_required
 def client_calendar():
-    if not current_user.is_cliente_adm() and not current_user.is_admin():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
         abort(403)
     
     events = Event.query.filter_by(company_id=current_user.company_id).order_by(Event.start_at.asc()).all()
@@ -1032,7 +1039,7 @@ def client_calendar():
 @bp.route('/api/events', methods=['POST'])
 @login_required
 def create_event():
-    if not current_user.is_cliente_adm() and not current_user.is_admin():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
         return jsonify({'error': 'Não autorizado'}), 403
     
     data = request.get_json()
@@ -1094,12 +1101,29 @@ def delete_event(event_id):
 def my_demands():
     """Painel individual onde usuário vê apenas demandas relacionadas a ele"""
     
+    # Verificação básica de segurança
+    if not current_user.company_id:
+        abort(403, "Usuário não está associado a uma empresa")
+    
     # Buscar quadros kanban da empresa do usuário
     kanban_boards = DemandKanban.query.filter_by(company_id=current_user.company_id).all()
     
-    # Para cada quadro, filtrar apenas cards onde o usuário está envolvido
-    filtered_boards = []
+    # Função auxiliar para verificar acesso
+    def check_user_company_access(user, company_id):
+        """Verifica se o usuário tem acesso à empresa especificada"""
+        if user.is_admin():
+            return True  # Admin tem acesso a tudo
+        return user.company_id == company_id
+    
+    # Filtrar quadros acessíveis
+    accessible_boards = []
     for board in kanban_boards:
+        if check_user_company_access(current_user, board.company_id):
+            accessible_boards.append(board)
+    
+    # Para cada quadro acessível, filtrar apenas cards onde o usuário está envolvido
+    filtered_boards = []
+    for board in accessible_boards:
         # Criar uma cópia "filtrada" do quadro
         filtered_board = {
             'id': board.id,

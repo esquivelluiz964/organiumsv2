@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block title %}Entretenimento{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h2>🎮 Área de Entretenimento</h2>
+  <p class="muted">Escolha um jogo para relaxar:</p>
+
+  <!-- Navegação entre jogos -->
+  <div class="games-navigation">
+    <button class="game-btn active" onclick="showGame('game2048')">2048</button>
+    <button class="game-btn" onclick="showGame('gameSubway')">Subway Surfers</button>
+    <button class="game-btn" onclick="showGame('gameSlither')">Slither.io</button>
+    <button class="game-btn" onclick="showGame('gamePuzzle')">Puzzle Bobble</button>
+    <button class="game-btn" onclick="showGame('gamePix')">Jogo GamePix</button>
+  </div>
+
+  <!-- Container dos jogos -->
+  <div class="games-container">
+    
+    <!-- 2048 -->
+    <div id="game2048" class="game-frame active">
+      <iframe 
+        src="https://poki.com/embed/2048" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        onload="iframeLoaded(this)" 
+        onerror="iframeError(this)">
+      </iframe>
+    </div>
+
+    <!-- Subway Surfers -->
+    <div id="gameSubway" class="game-frame">
+      <iframe 
+        src="https://poki.com/embed/subway-surfers" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        onload="iframeLoaded(this)" 
+        onerror="iframeError(this)">
+      </iframe>
+    </div>
+
+    <!-- Slither.io -->
+    <div id="gameSlither" class="game-frame">
+      <iframe 
+        src="https://poki.com/embed/slither-io" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        onload="iframeLoaded(this)" 
+        onerror="iframeError(this)">
+      </iframe>
+    </div>
+
+    <!-- Puzzle Bobble -->
+    <div id="gamePuzzle" class="game-frame">
+      <iframe 
+        src="https://www.crazygames.com/embed/puzzle-bobble" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        onload="iframeLoaded(this)" 
+        onerror="iframeError(this)">
+      </iframe>
+    </div>
+
+    <!-- GamePix -->
+    <div id="gamePix" class="game-frame">
+      <iframe 
+        src="https://games.gamepix.com/play/40056" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        onload="iframeLoaded(this)" 
+        onerror="iframeError(this)">
+      </iframe>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.games-navigation {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.game-btn {
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  background: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.game-btn:hover {
+  background: #007bff;
+  color: white;
+}
+
+.game-btn.active {
+  background: #007bff;
+  color: white;
+}
+
+.games-container {
+  position: relative;
+  min-height: 600px;
+}
+
+.game-frame {
+  display: none;
+  width: 100%;
+  height: 600px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.game-frame.active {
+  display: block;
+}
+
+.game-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.error-message {
+  display: none;
+  text-align: center;
+  padding: 50px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  color: #6c757d;
+}
+
+.error-message.active {
+  display: block;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+</style>
+
+<script>
+// Mostrar jogo selecionado
+function showGame(gameId) {
+  // Esconder todos os jogos
+  document.querySelectorAll('.game-frame').forEach(frame => {
+    frame.classList.remove('active');
+  });
+  
+  // Remover active de todos os botões
+  document.querySelectorAll('.game-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Mostrar jogo selecionado
+  document.getElementById(gameId).classList.add('active');
+  
+  // Ativar botão clicado
+  event.target.classList.add('active');
+}
+
+// Quando iframe carrega com sucesso
+function iframeLoaded(iframe) {
+  console.log('Iframe carregado:', iframe.src);
+  // Remove qualquer mensagem de erro se existir
+  const container = iframe.parentElement;
+  const errorMsg = container.querySelector('.error-message');
+  if (errorMsg) {
+    errorMsg.remove();
+  }
+}
+
+// Quando iframe dá erro
+function iframeError(iframe) {
+  console.error('Erro ao carregar iframe:', iframe.src);
+  
+  const container = iframe.parentElement;
+  
+  // Esconde o iframe com erro
+  iframe.style.display = 'none';
+  
+  // Cria mensagem de erro se não existir
+  if (!container.querySelector('.error-message')) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message active';
+    errorDiv.innerHTML = `
+      <div class="error-icon">🔧</div>
+      <h3>Entretenimento em Atualização</h3>
+      <p>Este jogo está temporariamente indisponível.</p>
+      <p><small>Tente outro jogo ou volte mais tarde.</small></p>
+    `;
+    container.appendChild(errorDiv);
+  }
+}
+
+// Carregar primeiro jogo ao iniciar
+document.addEventListener('DOMContentLoaded', function() {
+  // Verificar se todos os iframes carregaram
+  setTimeout(() => {
+    document.querySelectorAll('iframe').forEach(iframe => {
+      // Se o iframe não carregou conteúdo após 3 segundos, considera erro
+      if (!iframe.contentWindow || !iframe.contentWindow.document.body.children.length) {
+        iframeError(iframe);
+      }
+    });
+  }, 3000);
+});
+</script>
+{% endblock %}

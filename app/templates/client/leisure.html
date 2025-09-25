@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Meus lazeres - Organiums{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
 {% block content %}
 <div class="container client-section">
   <h1>Meus lazeres</h1>
@@ -13,5 +16,10 @@
       <p class="empty-state">Você ainda não criou lazeres.</p>
     {% endfor %}
   </ul>
+      <a href="{{ url_for('app_bp.entretenimento') }}" class="dash-card"> 
+        <div class="card-icon">😁</div> 
+        <h3>Entretenimento</h3> 
+        <p>Página de entretenimento do site.</p> 
+      </a> 
 </div>
 {% endblock %}
