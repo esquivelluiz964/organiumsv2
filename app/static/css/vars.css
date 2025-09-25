@@ -1,14 +1,19 @@
 :root {
-  /* ---------- Cores principais ---------- */
+  /* ---------- Tema: Cores Globais ---------- */
   --bg: #ffffff;
   --fg: #111827;
-  --brand-primary: #0ea5a4;   /* Turquesa principal */
-  --brand-secondary: #06b6d4; /* Turquesa clara */
-  --brand-dark: #0d9488;      /* Turquesa escura */
-  
   --bg-light: #f3f4f6;
+
   --muted: #6b7280;
   --muted-light: #9ca3af;
+
+  --border: #e5e7eb;
+  --surface: #ffffff;
+
+  /* ---------- Marca ---------- */
+  --brand-primary: #0ea5a4;
+  --brand-secondary: #06b6d4;
+  --brand-dark: #0d9488;
 
   /* ---------- Cores de Status ---------- */
   --success: #10b981;
@@ -22,19 +27,19 @@
 
   /* ---------- Tipografia ---------- */
   --font-base: 'Inter', system-ui, Arial, sans-serif;
-  --font-alt: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-alt: 'Inter', system-ui, Arial, sans-serif;
 
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-md: 1rem;      /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
 
   --line-height: 1.6;
 
-  /* ---------- Espaçamentos ---------- */
+  /* ---------- Espaçamento ---------- */
   --container-width: 1200px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -55,8 +60,12 @@
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
                0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  /* ---------- Transições ---------- */
+  /* ---------- Outros ---------- */
   --transition: all 0.3s ease;
+
+  /* ---------- Cores específicas reutilizáveis ---------- */
+  --modal-bg: var(--surface);
+  --overlay-bg: rgba(0, 0, 0, 0.6);
 }
 
 /* ---------- Dark mode ---------- */
@@ -65,12 +74,18 @@
     --bg: #111827;
     --fg: #f3f4f6;
     --bg-light: #1f2937;
+
     --muted: #d1d5db;
     --muted-light: #9ca3af;
+
+    --surface: #1f2937;
+    --border: #374151;
 
     --info-bg: #1e3a8a;
     --success-bg: #064e3b;
     --danger-bg: #7f1d1d;
     --warning-bg: #78350f;
+
+    --overlay-bg: rgba(255, 255, 255, 0.1);
   }
 }

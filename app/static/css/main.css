@@ -23,12 +23,12 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, Arial, sans-serif;
+  font-family: var(--font-base);
   background: var(--bg);
   color: var(--fg);
   margin: 0;
   padding: 0;
-  line-height: 1.6;
+  line-height: var(--line-height);
 }
 
 .container {
@@ -41,14 +41,15 @@ body {
   padding: var(--spacing-lg);
   text-align: center;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   margin-top: var(--spacing-xl);
 }
 
+/* ---------- Botões ---------- */
 button {
   background: var(--brand-primary);
   border: none;
-  color: white;
+  color: #fff;
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius);
   cursor: pointer;
@@ -63,19 +64,7 @@ input, button {
   font: inherit;
 }
 
-/* Utilitários */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
+/* ---------- Flash Messages ---------- */
 .flash-messages {
   max-width: var(--container-width);
   margin: var(--spacing-md) auto;
@@ -86,26 +75,26 @@ input, button {
   padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   border-radius: var(--radius);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 
 .flash-success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #10b981;
+  background-color: var(--success-bg);
+  color: var(--success);
+  border: 1px solid var(--success);
 }
 
 .flash-danger {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #ef4444;
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger);
 }
 
-/* === MODAL === */
+/* ---------- Modal ---------- */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
+  background: var(--overlay-bg);
   display: none;
   align-items: center;
   justify-content: center;
@@ -118,29 +107,31 @@ input, button {
 }
 
 .modal-content {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: var(--radius-lg, 12px);
+  background: var(--modal-bg);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
   width: 400px;
   max-width: 90%;
   position: relative;
   animation: fadeIn 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .modal-content h2 {
-  margin-bottom: 1rem;
-  color: var(--brand-primary, #0056b3);
+  margin-bottom: var(--spacing-md);
+  color: var(--brand-primary);
 }
 
 .modal-content input,
 .modal-content textarea {
   width: 100%;
-  margin-bottom: 0.8rem;
-  padding: 0.6rem;
-  border-radius: var(--radius, 6px);
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  font-size: var(--text-sm);
+  background: var(--bg);
+  color: var(--fg);
 }
 
 .modal-content textarea {
@@ -150,19 +141,19 @@ input, button {
 
 .close {
   position: absolute;
-  right: 1rem;
-  top: 0.8rem;
+  right: var(--spacing-md);
+  top: var(--spacing-md);
   cursor: pointer;
-  font-size: 1.5rem;
-  color: #666;
+  font-size: var(--text-xl);
+  color: var(--muted);
   transition: color 0.2s;
 }
 
 .close:hover {
-  color: #000;
+  color: var(--fg);
 }
 
-/* === ANIMAÇÃO === */
+/* ---------- Animação ---------- */
 @keyframes fadeIn {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
