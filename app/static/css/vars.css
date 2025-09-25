@@ -1,38 +1,76 @@
 :root {
-  /* Cores principais - Tema Organiums (azul/turquesa) */
+  /* ---------- Cores principais ---------- */
   --bg: #ffffff;
   --fg: #111827;
-  --brand-primary: #0ea5a4;
-  --brand-secondary: #06b6d4;
-  --brand-dark: #0d9488;
+  --brand-primary: #0ea5a4;   /* Turquesa principal */
+  --brand-secondary: #06b6d4; /* Turquesa clara */
+  --brand-dark: #0d9488;      /* Turquesa escura */
+  
+  --bg-light: #f3f4f6;
   --muted: #6b7280;
   --muted-light: #9ca3af;
-  --bg-light: #f3f4f6;
-  
-  /* Elementos de UI */
-  --radius: 8px;
-  --radius-lg: 12px;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  
-  /* Espaçamentos */
+
+  /* ---------- Cores de Status ---------- */
+  --success: #10b981;
+  --success-bg: #d1fae5;
+  --danger: #ef4444;
+  --danger-bg: #fee2e2;
+  --warning: #f59e0b;
+  --warning-bg: #fef3c7;
+  --info: #3b82f6;
+  --info-bg: #dbeafe;
+
+  /* ---------- Tipografia ---------- */
+  --font-base: 'Inter', system-ui, Arial, sans-serif;
+  --font-alt: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-md: 1rem;      /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+
+  --line-height: 1.6;
+
+  /* ---------- Espaçamentos ---------- */
   --container-width: 1200px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
-  /* Transições */
+  --spacing-2xl: 48px;
+
+  /* ---------- Bordas e Sombra ---------- */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+               0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+               0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* ---------- Transições ---------- */
   --transition: all 0.3s ease;
 }
 
-/* Modo escuro (para o futuro) */
+/* ---------- Dark mode ---------- */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #111827;
     --fg: #f3f4f6;
     --bg-light: #1f2937;
     --muted: #d1d5db;
+    --muted-light: #9ca3af;
+
+    --info-bg: #1e3a8a;
+    --success-bg: #064e3b;
+    --danger-bg: #7f1d1d;
+    --warning-bg: #78350f;
   }
 }

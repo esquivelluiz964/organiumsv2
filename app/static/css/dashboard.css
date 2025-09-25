@@ -7,7 +7,8 @@
 .dashboard-container h2 {
   color: var(--fg);
   margin-bottom: var(--spacing-sm);
-  font-size: 1.8rem;
+  font-size: var(--text-xl);
+  font-weight: 600;
 }
 
 .dashboard-container .muted {
@@ -36,7 +37,7 @@
 
 .dash-card:hover {
   background: var(--brand-primary);
-  color: #fff;
+  color: var(--fg-inverse);
   transform: translateY(-4px);
 }
 
@@ -47,17 +48,17 @@
 
 .dash-card h3 {
   margin-bottom: var(--spacing-xs);
-  font-size: 1.2rem;
+  font-size: var(--text-lg);
 }
 
 .dash-card p {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: inherit;
 }
 
 .dash-card.disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
+  background: var(--gray-200);
+  color: var(--muted-light);
   pointer-events: none;
   box-shadow: none;
 }

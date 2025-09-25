@@ -1,232 +1,257 @@
 /* ---------- Layout Geral ---------- */
 .container.client-section {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  font-family: var(--font-body);
 }
 
 /* ---------- Header ---------- */
 .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
 }
 
 .calendar-header h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #2c3e50;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--fg);
 }
 
 .calendar-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-/* Botões */
-.btn-primary,
-.btn-secondary,
-.btn-danger {
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background: #2563eb;
-}
-
-.btn-secondary {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.btn-danger {
-    background: #ef4444;
-    color: #fff;
-}
-
+/* View selector */
 .view-selector {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: var(--spacing-xs);
 }
 
 .btn-view {
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-view.active {
-    background: #3b82f6;
-    color: #fff;
-    border-color: #2563eb;
+  background: var(--brand-primary);
+  color: var(--fg-inverse);
+  border-color: var(--brand-primary-dark);
 }
 
 /* ---------- Navegação ---------- */
 .calendar-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 0;
-    gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--spacing-md) 0;
+  gap: var(--spacing-lg);
 }
 
 .calendar-nav h2 {
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: #111827;
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--fg);
 }
 
 .nav-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #374151;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--muted);
+  transition: var(--transition);
 }
 
 .nav-btn:hover {
-    color: #111827;
+  color: var(--fg);
 }
 
 /* ---------- Grade do Calendário ---------- */
+/* ---------- Grade do Calendário ---------- */
 .calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-light);
 }
 
 .calendar .day {
-    border: 1px solid #e5e7eb;
-    min-height: 100px;
-    padding: 5px;
-    position: relative;
-    font-size: 0.8rem;
+  border: 1px solid var(--gray-200);
+  min-height: 110px;
+  padding: var(--spacing-xs);
+  position: relative;
+  font-size: var(--text-sm);
+  transition: var(--transition);
 }
 
+.calendar .day:hover {
+  background: var(--gray-100);
+}
+
+/* Número do dia */
 .calendar .day .date {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #374151;
-    margin-bottom: 4px;
+  font-weight: 600;
+  font-size: var(--text-md);
+  color: var(--fg);
+  margin-bottom: var(--spacing-xxs);
 }
 
 /* Dia atual */
 .calendar .day.today {
-    background: #f0f9ff;
-    border: 2px solid #3b82f6;
+  background: var(--brand-primary-light);
+  border: 2px solid var(--brand-primary);
 }
 
 /* ---------- Eventos ---------- */
 .calendar .event {
-    display: inline-block;
-    background: #3b82f6; /* cor padrão */
-    color: #fff;
-    font-size: 0.75rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin: 2px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+  display: inline-block;
+  background: var(--brand-primary);
+  color: var(--fg-inverse);
+  font-size: var(--text-xs);
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  border-radius: 999px; /* estilo pill */
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
 }
 
-/* As cores vão ser aplicadas inline via JS */
-.calendar .event[data-color] {
-    background: attr(data-color color, #3b82f6);
+.calendar .event:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Variações de cor para eventos */
+.event-success { background: var(--success); }
+.event-warning { background: var(--warning); }
+.event-danger  { background: var(--danger); }
+.event-info    { background: var(--info); }
+.event-dark    { background: var(--gray-700); }
+
+/* ---------- Dark Mode ---------- */
+[data-theme="dark"] .calendar {
+  background: var(--bg-dark);
+  border-color: var(--gray-700);
+}
+
+[data-theme="dark"] .calendar .day {
+  border-color: var(--gray-600);
+}
+
+[data-theme="dark"] .calendar .day:hover {
+  background: var(--gray-800);
+}
+
+/* Dia atual */
+.calendar .day.today {
+  background: var(--brand-primary-light);
+  border: 2px solid var(--brand-primary);
+}
+
+/* ---------- Eventos ---------- */
+.calendar .event {
+  display: inline-block;
+  background: var(--brand-primary);
+  color: var(--fg-inverse);
+  font-size: var(--text-xs);
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 /* ---------- Modal ---------- */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    padding-top: 50px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background: rgba(0, 0, 0, 0.5);
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: var(--overlay);
 }
 
 .modal-content {
-    background: #fff;
-    margin: auto;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: var(--bg-light);
+  margin: auto;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
 }
 
 .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-    color: #1f2937;
+  margin-bottom: var(--spacing-md);
+  font-size: var(--text-lg);
+  color: var(--fg);
 }
 
 .modal-content .form-group {
-    margin-bottom: 12px;
+  margin-bottom: var(--spacing-sm);
 }
 
 .modal-content label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #374151;
-    display: block;
-    margin-bottom: 4px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--fg);
+  display: block;
+  margin-bottom: var(--spacing-xxs);
 }
 
 .modal-content input,
 .modal-content select,
 .modal-content textarea {
-    width: 100%;
-    padding: 6px 8px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 0.9rem;
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
 }
 
 .color-picker {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .color-picker input[type="color"] {
-    border: none;
-    width: 40px;
-    height: 30px;
-    cursor: pointer;
+  border: none;
+  width: 40px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
 }
 
 /* ---------- Responsividade ---------- */
 @media (max-width: 768px) {
-    .calendar {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .calendar {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
