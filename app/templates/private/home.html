@@ -50,7 +50,7 @@
         <p>Criar e gerenciar metas estratégicas, táticas e operacionais.</p>
       </a>
 
-      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+      <a href="{{ url_for('app_bp.client_calendar') }}" class="dash-card">
         <div class="card-icon">📅</div>
         <h3>Agenda institucional</h3>
         <p>Gerenciar agenda da empresa.</p>
@@ -97,7 +97,7 @@
         <p>Criar e gerenciar metas estratégicas, táticas e operacionais.</p>
       </a>
 
-      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+      <a href="{{ url_for('app_bp.client_calendar') }}" class="dash-card">
         <div class="card-icon">📅</div>
         <h3>Agenda institucional</h3>
         <p>Gerenciar agenda da empresa.</p>
@@ -138,7 +138,7 @@
     <!-- Sessão Cliente (cliente) -->
     {% if current_user.is_cliente() %}
 
-      <a href="{{ url_for('app_bp.client_events') }}" class="dash-card">
+      <a href="{{ url_for('app_bp.client_calendar') }}" class="dash-card">
         <div class="card-icon">📅</div>
         <h3>Agenda institucional</h3>
         <p>Gerenciar agenda da empresa.</p>

@@ -1008,7 +1008,7 @@ def reorder_kanban_cards(column_id):
 def client_events():
     if not current_user.is_cliente_adm() and not current_user.is_admin():
             abort(403)
-    events = Event.query.filter_by(company_id=current_user.company_id).order_by(Event.start_at.desc()).all()
+    events = Event.query.filter_by(company_id=current_user.company_id).all()
     register_log("Acesso: cliente_adm - events")
     return render_template('client/events_list.html', events=events)
 

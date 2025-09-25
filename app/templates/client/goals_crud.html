@@ -34,3 +34,96 @@
 </div>
 
 {% endblock %}
+
+{% block include_js %}
+<script>
+(function(){
+  function esc(s){
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function initGoalModalOverride(){
+    const crudModal = document.getElementById('crudModal');
+    const crudForm = document.getElementById('crudForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const formLevel = document.getElementById('formLevel');
+    const formId = document.getElementById('formId');
+    const formFields = document.getElementById('formFields');
+
+    if (!crudModal || !crudForm || !modalTitle || !formFields) return;
+
+    // guarda referências originais (se existirem)
+    const origOpenCreate = window.openCreateModal;
+    const origOpenEdit = window.openEditModal;
+
+    // Sobrescreve apenas para 'goal'
+    window.openCreateModal = function(type, level) {
+      if (type === 'goal') {
+        modalTitle.innerText = 'Nova Meta';
+        crudForm.method = 'POST';
+        crudForm.action = '/client/goals/new';
+        if (formLevel) formLevel.value = level || '';
+        if (formId) formId.value = '';
+
+        formFields.innerHTML = `
+          <label>Título</label>
+          <input type="text" name="title" placeholder="Título" value="" required>
+          <label>Descrição</label>
+          <textarea name="description" placeholder="Descrição"></textarea>
+          <input type="hidden" name="level" value="${esc(level || '')}">
+        `;
+
+        crudModal.classList.add('active');
+      } else {
+        if (typeof origOpenCreate === 'function') {
+          origOpenCreate(type, level);
+        }
+      }
+    };
+
+    // itemData será passado pelo listener global do base.html (ele constrói itemData a partir dos data-attributes)
+    window.openEditModal = function(type, id, itemData = {}) {
+      if (type === 'goal') {
+        modalTitle.innerText = 'Editar Meta';
+        crudForm.method = 'POST';
+        crudForm.action = '/client/goals/' + id + '/edit';
+        if (formId) formId.value = id;
+
+        const title = itemData.title || itemData.name || '';
+        const description = itemData.description || '';
+
+        const level = itemData.level || '';
+
+        formFields.innerHTML = `
+          <label>Título</label>
+          <input type="text" name="title" placeholder="Título" value="${esc(title)}" required>
+          <label>Descrição</label>
+          <textarea name="description" placeholder="Descrição">${esc(description)}</textarea>
+          <input type="hidden" name="level" value="${esc(level)}">
+        `;
+
+        if (formLevel) formLevel.value = level || '';
+        crudModal.classList.add('active');
+      } else {
+        if (typeof origOpenEdit === 'function') {
+          origOpenEdit(type, id, itemData);
+        }
+      }
+    };
+  }
+
+  // executa mesmo se DOMContentLoaded já tiver disparado
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGoalModalOverride);
+  } else {
+    initGoalModalOverride();
+  }
+})();
+</script>
+{% endblock %}
