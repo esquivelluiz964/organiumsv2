@@ -527,7 +527,7 @@ def admin_logs():
 @bp.route('/client/goals')
 @login_required
 def client_goals():
-    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() and not current_user.is_funcionario() and not current_user.is_cliente():
         abort(403)
 
     goals = Goal.query.filter_by(company_id=current_user.company_id).order_by(Goal.created_at.desc()).all()
@@ -1013,7 +1013,7 @@ def reorder_kanban_cards(column_id):
 @bp.route('/client/events')
 @login_required
 def client_events():
-    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() and not current_user.is_funcionario() and not current_user.is_cliente():
             abort(403)
     events = Event.query.filter_by(company_id=current_user.company_id).all()
     register_log("Acesso: cliente_adm - events")
@@ -1022,7 +1022,7 @@ def client_events():
 @bp.route('/client/calendar')
 @login_required
 def client_calendar():
-    if not current_user.is_cliente_adm() and not current_user.is_admin() or not current_user.is_funcionario() or not current_user.is_cliente():
+    if not current_user.is_cliente_adm() and not current_user.is_admin() and not current_user.is_funcionario() and not current_user.is_cliente():
         abort(403)
     
     events = Event.query.filter_by(company_id=current_user.company_id).order_by(Event.start_at.asc()).all()
