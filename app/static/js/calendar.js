@@ -110,7 +110,7 @@ class CalendarManager {
         // weekdays header
         const weekDays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
         const headerRow = document.createElement('div');
-        headerRow.className = 'calendar-weekdays';
+        headerRow.className = 'calendar-header';
         weekDays.forEach(d => {
             const cell = document.createElement('div');
             cell.className = 'weekday';

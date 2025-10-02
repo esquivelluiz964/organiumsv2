@@ -356,6 +356,9 @@ def admin_blog():
 @bp.route('/admin/blog/novo', methods=['GET','POST'])
 @login_required
 def admin_blog_novo():
+    if not current_user.is_admin() and not current_user.is_funcionario():
+        abort(403)
+        
     if request.method == 'POST':
         titulo = request.form.get('titulo')
         slug = request.form.get('slug')
@@ -363,7 +366,7 @@ def admin_blog_novo():
         conteudo = request.form.get('conteudo')
 
         if BlogPost.query.filter_by(slug=slug).first():
-            flash('O tema do blog já existe', 'danger')
+            flash('O slug do blog já existe', 'danger')
             register_log("Tentativa de criação de post falhou: slug já existe", status="fail")
             return redirect(url_for('app_bp.admin_blog_novo'))
 
@@ -375,6 +378,55 @@ def admin_blog_novo():
         return redirect(url_for('app_bp.admin_blog'))
 
     return render_template('admin/blog_form.html')
+
+@bp.route('/admin/blog/editar/<int:post_id>', methods=['GET','POST'])
+@login_required
+def admin_blog_editar(post_id):
+    if not current_user.is_admin() and not current_user.is_funcionario():
+        abort(403)
+        
+    post = BlogPost.query.get_or_404(post_id)
+    
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
+        slug = request.form.get('slug')
+        resumo = request.form.get('resumo')
+        conteudo = request.form.get('conteudo')
+
+        # Verifica se o slug já existe em outro post
+        existing_post = BlogPost.query.filter_by(slug=slug).first()
+        if existing_post and existing_post.id != post.id:
+            flash('O slug do blog já existe em outro post', 'danger')
+            register_log(f"Tentativa de edição do post {post_id} falhou: slug já existe", status="fail")
+            return redirect(url_for('app_bp.admin_blog_editar', post_id=post_id))
+
+        post.titulo = titulo
+        post.slug = slug
+        post.resumo = resumo
+        post.conteudo = conteudo
+        post.atualizado_em = db.func.current_timestamp()
+        
+        db.session.commit()
+        flash('Post atualizado com sucesso!', 'success')
+        register_log(f"Edição do post {post_id}")
+        return redirect(url_for('app_bp.admin_blog'))
+
+    return render_template('admin/blog_form.html', post=post)
+
+@bp.route('/admin/blog/excluir/<int:post_id>', methods=['POST'])
+@login_required
+def admin_blog_excluir(post_id):
+    if not current_user.is_admin() and not current_user.is_funcionario():
+        abort(403)
+        
+    post = BlogPost.query.get_or_404(post_id)
+    
+    db.session.delete(post)
+    db.session.commit()
+    
+    flash('Post excluído com sucesso!', 'success')
+    register_log(f"Exclusão do post {post_id}")
+    return redirect(url_for('app_bp.admin_blog'))
 
 # administrar os chamados
 @bp.route('/admin/ajuda')
@@ -413,6 +465,28 @@ def admin_contatos():
     contatos = Contato.query.order_by(Contato.criado_em.desc()).all()
     register_log("Acesso à página de contatos/admin")
     return render_template('admin/contatos.html', contatos=contatos)
+
+@bp.route('/admin/contatos/atualizar_status/<int:contato_id>', methods=['POST'])
+@login_required
+def atualizar_status_contato(contato_id):
+    if not current_user.is_admin():
+        abort(403)
+    
+    contato = Contato.query.get_or_404(contato_id)
+    novo_status = request.form.get('status')
+    
+    # Validação do status
+    status_validos = ['não visualizada', 'visualizada', 'respondida']
+    if novo_status not in status_validos:
+        flash('Status inválido', 'danger')
+        return redirect(url_for('app_bp.admin_contatos'))
+    
+    contato.status = novo_status
+    db.session.commit()
+    
+    flash(f'Status atualizado para "{novo_status}"', 'success')
+    register_log(f"Status do contato {contato_id} atualizado para {novo_status}")
+    return redirect(url_for('app_bp.admin_contatos'))
 
 # administrar usuários da plataforma
 @bp.route('/admin/usuarios')
@@ -506,11 +580,58 @@ def admin_usuario_excluir(user_id):
     if not current_user.is_admin():
         abort(403)
 
+    # Impede que o usuário exclua a si mesmo
+    if user_id == current_user.id:
+        flash('Você não pode excluir sua própria conta!', 'danger')
+        return redirect(url_for('app_bp.admin_usuarios'))
+
     user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    register_log(f"Usuário excluído: {user.username}")
-    flash('Usuário excluído com sucesso!', 'success')
+    
+    try:
+        # 1. Primeiro, atualiza ou remove referências em outras tabelas
+        
+        # Atualiza kanban_card (define created_by para outro usuário admin ou remove os cards)
+        from sqlalchemy import text
+        admin_user = User.query.filter(User.role.in_(['admin', 'funcionarios'])).filter(User.id != user_id).first()
+        
+        if admin_user:
+            # Atualiza kanban_card para usar outro usuário admin
+            KanbanCard.query.filter_by(created_by=user_id).update({'created_by': admin_user.id})
+        else:
+            # Se não há outro admin, exclui os cards
+            KanbanCard.query.filter_by(created_by=user_id).delete()
+        
+        # Atualiza ou remove outras referências
+        BlogPost.query.filter_by(autor_id=user_id).delete()
+        Ticket.query.filter_by(usuario_id=user_id).delete()
+        Mensagem.query.filter_by(usuario_id=user_id).delete()
+        Log.query.filter_by(user_id=user_id).update({'user_id': None})
+        
+        # Atualiza demandas onde o usuário é owner
+        Demand.query.filter_by(owner_id=user_id).update({'owner_id': None})
+        
+        # Remove relacionamentos de colaborador se existir
+        collaborator = Collaborator.query.filter_by(user_id=user_id).first()
+        if collaborator:
+            collaborator.user_id = None
+        
+        # Remove organizações pessoais, demandas pessoais e lazer
+        Organization.query.filter_by(owner_id=user_id).delete()
+        PersonalDemand.query.filter_by(owner_id=user_id).delete()
+        Leisure.query.filter_by(owner_id=user_id).delete()
+        
+        # 2. Agora pode excluir o usuário
+        db.session.delete(user)
+        db.session.commit()
+        
+        register_log(f"Usuário excluído: {user.username}")
+        flash('Usuário excluído com sucesso!', 'success')
+        
+    except Exception as e:
+        db.session.rollback()
+        register_log(f"Erro ao excluir usuário {user.username}: {str(e)}", status="fail")
+        flash('Erro ao excluir usuário. Existem registros vinculados a este usuário.', 'danger')
+    
     return redirect(url_for('app_bp.admin_usuarios'))
 
 # auditar os log da plataforma
@@ -1339,3 +1460,36 @@ def organizations_delete(id):
     flash("Organização removida!", "success")
     register_log("Organização removida")
     return redirect(url_for("app_bp.organizations_list"))
+
+# página de kpi
+
+@bp.route('/dashboard/kpi')
+@login_required
+def dashboard_kpi():
+    register_log("Acesso à página de KPIs")
+    
+    # Dados mockados para demonstração (substitua por dados reais)
+    kpi_data = {
+        'adocao': {
+            'taxa_adesao': {'value': 75, 'target': 80, 'trend': 'up'},
+            'retencao_usuarios': {'value': 85, 'target': 90, 'trend': 'stable'},
+            'tempo_sessao': {'value': 12.5, 'target': 15, 'trend': 'up'}
+        },
+        'colaboradores': {
+            'nps_semanal': {'value': 8.2, 'target': 8.5, 'trend': 'up'},
+            'bem_estar': {'value': 4.1, 'target': 4.3, 'trend': 'stable'},
+            'nivel_stress': {'value': 2.3, 'target': 2.0, 'trend': 'down'}
+        },
+        'rh': {
+            'turnover': {'value': 8.5, 'target': 7.0, 'trend': 'down'},
+            'engajamento': {'value': 78, 'target': 80, 'trend': 'up'},
+            'conversao': {'value': 35, 'target': 40, 'trend': 'stable'}
+        },
+        'tecnica': {
+            'uptime': {'value': 99.8, 'target': 99.9, 'trend': 'stable'},
+            'latencia': {'value': 145, 'target': 120, 'trend': 'down'},
+            'erros_sessao': {'value': 0.8, 'target': 0.5, 'trend': 'down'}
+        }
+    }
+    
+    return render_template('private/kpi.html', kpi_data=kpi_data)

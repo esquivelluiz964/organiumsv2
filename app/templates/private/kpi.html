@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% block title %}KPIs - Dashboard{% endblock %}
+{% block include_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/private/kpi.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="kpi-header">
+        <h1>📊 Dashboard de KPIs</h1>
+        <p class="muted">Métricas de desempenho e engajamento da plataforma</p>
+    </div>
+
+    <div class="kpi-grid">
+        <!-- Seção 1: Adoção e Engajamento -->
+        <section class="kpi-section">
+            <h2 class="section-title">
+                <span class="section-icon">👥</span>
+                Adoção e Engajamento
+            </h2>
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Taxa de Adesão</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.adocao.taxa_adesao.trend == 'up' else 'negative' if kpi_data.adocao.taxa_adesao.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.adocao.taxa_adesao.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.adocao.taxa_adesao.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.adocao.taxa_adesao.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_adesao = (kpi_data.adocao.taxa_adesao.value / kpi_data.adocao.taxa_adesao.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_adesao if progress_adesao <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Retenção de Usuários</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.adocao.retencao_usuarios.trend == 'up' else 'negative' if kpi_data.adocao.retencao_usuarios.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.adocao.retencao_usuarios.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.adocao.retencao_usuarios.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.adocao.retencao_usuarios.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_retencao = (kpi_data.adocao.retencao_usuarios.value / kpi_data.adocao.retencao_usuarios.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_retencao if progress_retencao <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Tempo Médio de Sessão</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.adocao.tempo_sessao.trend == 'up' else 'negative' if kpi_data.adocao.tempo_sessao.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.adocao.tempo_sessao.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.adocao.tempo_sessao.value }} min</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.adocao.tempo_sessao.target }} min</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_sessao = (kpi_data.adocao.tempo_sessao.value / kpi_data.adocao.tempo_sessao.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_sessao if progress_sessao <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Impacto em Colaboradores -->
+        <section class="kpi-section">
+            <h2 class="section-title">
+                <span class="section-icon">💼</span>
+                Impacto em Colaboradores
+            </h2>
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>NPS Semanal</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.colaboradores.nps_semanal.trend == 'up' else 'negative' if kpi_data.colaboradores.nps_semanal.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.colaboradores.nps_semanal.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.colaboradores.nps_semanal.value }}/10</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.colaboradores.nps_semanal.target }}/10</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_nps = (kpi_data.colaboradores.nps_semanal.value / kpi_data.colaboradores.nps_semanal.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_nps if progress_nps <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Bem-estar do Colaborador</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.colaboradores.bem_estar.trend == 'up' else 'negative' if kpi_data.colaboradores.bem_estar.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.colaboradores.bem_estar.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.colaboradores.bem_estar.value }}/5</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.colaboradores.bem_estar.target }}/5</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_bem_estar = (kpi_data.colaboradores.bem_estar.value / kpi_data.colaboradores.bem_estar.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_bem_estar if progress_bem_estar <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Nível de Stress</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.colaboradores.nivel_stress.trend == 'down' else 'negative' if kpi_data.colaboradores.nivel_stress.trend == 'up' else 'neutral' }}">
+                            {{ kpi_data.colaboradores.nivel_stress.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.colaboradores.nivel_stress.value }}/5</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.colaboradores.nivel_stress.target }}/5</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_stress = ((kpi_data.colaboradores.nivel_stress.target - kpi_data.colaboradores.nivel_stress.value + kpi_data.colaboradores.nivel_stress.target) / kpi_data.colaboradores.nivel_stress.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_stress if progress_stress <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 3: Impacto no RH -->
+        <section class="kpi-section">
+            <h2 class="section-title">
+                <span class="section-icon">📈</span>
+                Impacto no RH
+            </h2>
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Turnover Mensal</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.rh.turnover.trend == 'down' else 'negative' if kpi_data.rh.turnover.trend == 'up' else 'neutral' }}">
+                            {{ kpi_data.rh.turnover.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.rh.turnover.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.rh.turnover.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_turnover = ((kpi_data.rh.turnover.target - kpi_data.rh.turnover.value + kpi_data.rh.turnover.target) / kpi_data.rh.turnover.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_turnover if progress_turnover <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Engajamento Organizacional</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.rh.engajamento.trend == 'up' else 'negative' if kpi_data.rh.engajamento.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.rh.engajamento.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.rh.engajamento.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.rh.engajamento.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_engajamento = (kpi_data.rh.engajamento.value / kpi_data.rh.engajamento.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_engajamento if progress_engajamento <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Taxa de Conversão</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.rh.conversao.trend == 'up' else 'negative' if kpi_data.rh.conversao.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.rh.conversao.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.rh.conversao.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.rh.conversao.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_conversao = (kpi_data.rh.conversao.value / kpi_data.rh.conversao.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_conversao if progress_conversao <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 4: Métricas Técnicas -->
+        <section class="kpi-section">
+            <h2 class="section-title">
+                <span class="section-icon">⚙️</span>
+                Métricas Técnicas
+            </h2>
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Uptime</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.tecnica.uptime.trend == 'up' else 'negative' if kpi_data.tecnica.uptime.trend == 'down' else 'neutral' }}">
+                            {{ kpi_data.tecnica.uptime.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.tecnica.uptime.value }}%</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.tecnica.uptime.target }}%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_uptime = (kpi_data.tecnica.uptime.value / kpi_data.tecnica.uptime.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_uptime if progress_uptime <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Latência</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.tecnica.latencia.trend == 'down' else 'negative' if kpi_data.tecnica.latencia.trend == 'up' else 'neutral' }}">
+                            {{ kpi_data.tecnica.latencia.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.tecnica.latencia.value }}ms</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.tecnica.latencia.target }}ms</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_latencia = ((kpi_data.tecnica.latencia.target - kpi_data.tecnica.latencia.value + kpi_data.tecnica.latencia.target) / kpi_data.tecnica.latencia.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_latencia if progress_latencia <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3>Erros por Sessão</h3>
+                        <span class="kpi-badge {{ 'positive' if kpi_data.tecnica.erros_sessao.trend == 'down' else 'negative' if kpi_data.tecnica.erros_sessao.trend == 'up' else 'neutral' }}">
+                            {{ kpi_data.tecnica.erros_sessao.trend }}
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ kpi_data.tecnica.erros_sessao.value }}</div>
+                    <div class="kpi-target">Meta: {{ kpi_data.tecnica.erros_sessao.target }}</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar">
+                            {% set progress_erros = ((kpi_data.tecnica.erros_sessao.target - kpi_data.tecnica.erros_sessao.value + kpi_data.tecnica.erros_sessao.target) / kpi_data.tecnica.erros_sessao.target * 100) %}
+                            <div class="progress-fill" style="width: {{ progress_erros if progress_erros <= 100 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

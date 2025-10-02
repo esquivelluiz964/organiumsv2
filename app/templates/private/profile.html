@@ -6,7 +6,7 @@
   <div class="profile-card">
     <div class="profile-avatar">
       {% if current_user.avatar %}
-        <img src="{{ current_user.avatar }}" alt="Avatar">
+        <img src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}" alt="Avatar de {{ current_user.name }}" width="32" height="32" class="user-avatar">
       {% else %}
         <span>{{ current_user.name[0]|upper }}</span>
       {% endif %}

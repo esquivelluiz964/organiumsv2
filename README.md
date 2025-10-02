@@ -1,60 +1,76 @@
-# Flask MVP Template
+# Organiums 🌱  
 
-Unzip and run:
+**Organiums** é uma plataforma digital (inicialmente web) que atua como um **copiloto profissional e pessoal**, ajudando colaboradores e empresas a equilibrarem rotinas, bem-estar e carreira.  
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
-export FLASK_APP=manage.py
-flask db upgrade  # creates migrations (configure DB_URI first)
-python run.py
-```
+Nosso propósito é **reduzir a sobrecarga, melhorar a experiência do colaborador e diminuir o turnover** em organizações modernas.
 
-Structure highlights:
-- `app/` - frontend blueprint (templates with Jinja components)
-- `api/` - backend/api blueprint (JSON endpoints)
-- `migrations/` - created after running `flask db init` (not included)
-- `manage.py` - Flask app factory + cli
-- `run.py` - simple runner
-- `clean.py` - removes .pyc and __pycache__
-- `requirements.txt` - pinned libs (you can adjust)
+---
 
-CSS root variables in `app/static/css/vars.css`.
-Jinja components are in `app/templates/components/` as macros for reuse.
+## 🚀 Proposta de Valor  
 
---- Aux
+- **Problema:**  
+  - Sobrecarga e dificuldade em equilibrar vida pessoal e profissional.  
+  - Alto índice de turnover em empresas.  
 
-        OBJETIVOS
-        <h3>Objetivos</h3>
-        <ul>
-          {% for o in objectives if o.level == level %}
-            <li>
-              <div>
-                <strong>{{ o.title }}</strong> - {{ o.description or "-" }}
-              </div>
-              <div class="actions">
-                <button class="btn-edit" onclick="openEditModal('goal', {{ o.id }}, '{{ o.title }}', '{{ o.description or '' }}', '{{ level }}')">Editar</button>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-        <button class="btn-add" onclick="openCreateModal('goal', '{{ level }}')">+ Novo Objetivo</button>
+- **Solução:**  
+  - Plataforma que oferece um **copiloto** para organizar rotina, bem-estar e carreira dos colaboradores.  
+  - Benefícios diretos: maior produtividade, engajamento e retenção de talentos.  
 
-        <!-- PLANOS -->
-        <h3>Planos</h3>
-        <ul>
-          {% for p in plans if p.level == level %}
-            <li>
-              <div>
-                <strong>{{ p.title }}</strong> - {{ p.description or "-" }}  
-                <br><small>👤 {{ p.who }} | 📅 {{ p.when }} | 📍 {{ p.where }}</small>
-              </div>
-              <div class="actions">
-                <button class="btn-edit" onclick="openEditModal('goal', {{ p.id }}, '{{ p.title }}', '{{ p.description or '' }}', '{{ level }}', '{{ p.who }}', '{{ p.when }}', '{{ p.where }}')">Editar</button>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-        <button class="btn-add" onclick="openCreateModal('goal', '{{ level }}')">+ Novo Plano</button>
+---
 
+## 🎯 Público-Alvo  
+
+- **Segmento principal:** RH de empresas que buscam reter talentos.  
+- **Mercado:** HRTech, empresas preocupadas com saúde organizacional e bem-estar.  
+
+---
+
+## 💼 Modelo de Negócio  
+
+- **Tipo:** B2B.  
+- **Receita:** Assinatura mensal baseada em pacotes de colaboradores.  
+
+---
+
+## 🌐 Plataforma Web  
+
+- **Fase inicial:** lançamento com um cliente piloto.  
+- **Foco:** acompanhar uso, coletar feedback, gerar relatórios e depoimentos.  
+- **Evolução:** práticas essencialmente humanas, com futuro híbrido (tecnologia + IA + mentoria).  
+
+---
+
+## 🧩 Business Model Canvas  
+
+- **Segmento de clientes:** RH de empresas.  
+- **Proposta de valor:** equilibrar vida dos colaboradores para reduzir turnover.  
+- **Canais:** Website, WhatsApp, LinkedIn, Instagram.  
+- **Relacionamento com clientes:** suporte via site; comunidades em WhatsApp, LinkedIn e Instagram.  
+- **Fontes de receita:** pacotes de assinatura B2B.  
+- **Atividades-chave:** desenvolvimento da tecnologia; atendimento ao RH; suporte a colaboradores.  
+- **Parcerias-chave:** consultorias de RH, universidades, empresas de tecnologia.  
+- **Estrutura de custos:** servidores (MVC), equipe de desenvolvimento, equipe de marketing, especialistas multidisciplinares.  
+
+---
+
+## 📊 KPIs  
+
+### Adoção e Engajamento  
+- Taxa de adesão.  
+- Retenção de usuários.  
+- Tempo médio de sessão.  
+
+### Impacto nos Colaboradores  
+- NPS semanal dos colaboradores.  
+- Índice semanal de autoavaliação de bem-estar.  
+- Monitoramento diário de estresse.  
+
+### Impacto no RH  
+- Percentual mensal de turnover.  
+- Estudo semestral de engajamento e clima organizacional.  
+- Taxa de indicações pós-compra e conversões após demonstrações.  
+
+### Técnicos  
+- Uptime.  
+- Latência.  
+- Erros por sessão.  

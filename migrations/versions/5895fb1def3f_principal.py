@@ -1,8 +1,8 @@
-"""Initial db
+"""principal
 
-Revision ID: ec7f92e30b26
+Revision ID: 5895fb1def3f
 Revises: 
-Create Date: 2025-09-24 17:13:27.343291
+Create Date: 2025-09-29 20:03:13.699420
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ec7f92e30b26'
+revision = '5895fb1def3f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,18 @@ def upgrade():
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('empresa', sa.String(length=120), nullable=True),
     sa.Column('mensagem', sa.Text(), nullable=False),
+    sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('criado_em', sa.DateTime(), nullable=True),
+    sa.Column('atualizado_em', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('system_metrics',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('uptime_percentage', sa.Float(), nullable=False),
+    sa.Column('average_latency', sa.Float(), nullable=False),
+    sa.Column('error_rate', sa.Float(), nullable=False),
+    sa.Column('measured_at', sa.DateTime(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('demand_kanban',
@@ -45,23 +56,26 @@ def upgrade():
     sa.ForeignKeyConstraint(['company_id'], ['company.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('event',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('company_id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=300), nullable=False),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('start_at', sa.DateTime(), nullable=True),
-    sa.Column('end_at', sa.DateTime(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['company_id'], ['company.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('goal',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('company_id', sa.Integer(), nullable=False),
     sa.Column('level', sa.String(length=20), nullable=False),
     sa.Column('title', sa.String(length=300), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['company_id'], ['company.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('kpi',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('company_id', sa.Integer(), nullable=False),
+    sa.Column('category', sa.String(length=50), nullable=False),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('value', sa.Float(), nullable=False),
+    sa.Column('target', sa.Float(), nullable=True),
+    sa.Column('unit', sa.String(length=20), nullable=False),
+    sa.Column('period', sa.String(length=20), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['company_id'], ['company.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -202,6 +216,45 @@ def upgrade():
     sa.ForeignKeyConstraint(['usuario_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('user_session',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('session_start', sa.DateTime(), nullable=False),
+    sa.Column('session_end', sa.DateTime(), nullable=True),
+    sa.Column('duration_minutes', sa.Integer(), nullable=True),
+    sa.Column('ip_address', sa.String(length=45), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('employee_survey',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('collaborator_id', sa.Integer(), nullable=False),
+    sa.Column('nps_score', sa.Integer(), nullable=True),
+    sa.Column('wellbeing_score', sa.Integer(), nullable=True),
+    sa.Column('stress_level', sa.Integer(), nullable=True),
+    sa.Column('survey_date', sa.Date(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['collaborator_id'], ['collaborator.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('event',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('company_id', sa.Integer(), nullable=False),
+    sa.Column('title', sa.String(length=300), nullable=False),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('start_at', sa.DateTime(), nullable=True),
+    sa.Column('end_at', sa.DateTime(), nullable=True),
+    sa.Column('responsavel_id', sa.Integer(), nullable=True),
+    sa.Column('setor_id', sa.Integer(), nullable=True),
+    sa.Column('cor', sa.String(length=7), nullable=True),
+    sa.Column('tipo', sa.String(length=50), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['company_id'], ['company.id'], ),
+    sa.ForeignKeyConstraint(['responsavel_id'], ['collaborator.id'], ),
+    sa.ForeignKeyConstraint(['setor_id'], ['sector.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('kanban_card',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('column_id', sa.Integer(), nullable=False),
@@ -255,6 +308,9 @@ def downgrade():
     op.drop_table('personal_demands')
     op.drop_table('mensagem')
     op.drop_table('kanban_card')
+    op.drop_table('event')
+    op.drop_table('employee_survey')
+    op.drop_table('user_session')
     op.drop_table('ticket')
     op.drop_table('organizations')
     op.drop_table('log')
@@ -271,9 +327,10 @@ def downgrade():
     op.drop_table('sector')
     op.drop_table('plan')
     op.drop_table('objective')
+    op.drop_table('kpi')
     op.drop_table('goal')
-    op.drop_table('event')
     op.drop_table('demand_kanban')
+    op.drop_table('system_metrics')
     op.drop_table('contato')
     op.drop_table('company')
     # ### end Alembic commands ###

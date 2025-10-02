@@ -53,7 +53,9 @@ class Contato(db.Model):
     email = db.Column(db.String(120), nullable=False)
     empresa = db.Column(db.String(120))
     mensagem = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default="não visualizada")  # Nova coluna
     criado_em = db.Column(db.DateTime, default=db.func.current_timestamp())
+    atualizado_em = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -277,3 +279,50 @@ class KanbanCard(db.Model):
     responsavel = db.relationship('Collaborator', backref='cards')
     setor = db.relationship('Sector', backref='cards')
     criador = db.relationship('User', backref='created_cards')
+
+class KPI(db.Model):
+    __tablename__ = "kpi"
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    category = db.Column(db.String(50), nullable=False)  # 'adocao', 'colaboradores', 'rh', 'tecnica'
+    name = db.Column(db.String(100), nullable=False)
+    value = db.Column(db.Float, nullable=False)
+    target = db.Column(db.Float, nullable=True)
+    unit = db.Column(db.String(20), nullable=False)  # '%', 'minutos', 'pontos', etc.
+    period = db.Column(db.String(20), nullable=False)  # 'daily', 'weekly', 'monthly', 'quarterly'
+    date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    company = db.relationship('Company', backref='kpis')
+
+class UserSession(db.Model):
+    __tablename__ = "user_session"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    session_start = db.Column(db.DateTime, nullable=False)
+    session_end = db.Column(db.DateTime, nullable=True)
+    duration_minutes = db.Column(db.Integer, nullable=True)
+    ip_address = db.Column(db.String(45))
+    
+    user = db.relationship('User', backref='sessions')
+
+class EmployeeSurvey(db.Model):
+    __tablename__ = "employee_survey"
+    id = db.Column(db.Integer, primary_key=True)
+    collaborator_id = db.Column(db.Integer, db.ForeignKey('collaborator.id'), nullable=False)
+    nps_score = db.Column(db.Integer, nullable=True)  # 0-10
+    wellbeing_score = db.Column(db.Integer, nullable=True)  # 1-5
+    stress_level = db.Column(db.Integer, nullable=True)  # 1-5
+    survey_date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    collaborator = db.relationship('Collaborator', backref='surveys')
+
+class SystemMetrics(db.Model):
+    __tablename__ = "system_metrics"
+    id = db.Column(db.Integer, primary_key=True)
+    uptime_percentage = db.Column(db.Float, nullable=False)
+    average_latency = db.Column(db.Float, nullable=False)  # em ms
+    error_rate = db.Column(db.Float, nullable=False)  # erros por sessão
+    measured_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

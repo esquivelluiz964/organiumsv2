@@ -10,6 +10,14 @@
   <h1>Mensagens de Contato</h1>
   <p class="muted">Aqui estão as perguntas enviadas pelos usuários via formulário de contato.</p>
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
   <div class="table-container">
     <table>
       <thead>
@@ -19,7 +27,9 @@
           <th>Email</th>
           <th>Empresa</th>
           <th>Mensagem</th>
+          <th>Status</th>
           <th>Data</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -30,11 +40,33 @@
           <td data-label="Email">{{ c.email }}</td>
           <td data-label="Empresa">{{ c.empresa or '-' }}</td>
           <td data-label="Mensagem">{{ c.mensagem }}</td>
+          <td data-label="Status">
+            {% if c.status == None %}
+            <span class="status-badge status-não-visualizada }}">
+              Não visualizada
+            </span>
+            {% else %}
+            <span class="status-badge status-{{ c.status.replace(' ', '-') }}">
+              {{ c.status }}
+            </span>
+            {%endif%}
+          </td>
           <td data-label="Data">{{ c.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td data-label="Ações">
+            <div class="status-actions">
+              <form method="POST" action="{{ url_for('app_bp.atualizar_status_contato', contato_id=c.id) }}" class="status-form">
+                <select name="status" class="status-select" onchange="this.form.submit()">
+                  <option value="não visualizada" {% if c.status == 'não visualizada' %}selected{% endif %}>Não Visualizada</option>
+                  <option value="visualizada" {% if c.status == 'visualizada' %}selected{% endif %}>Visualizada</option>
+                  <option value="respondida" {% if c.status == 'respondida' %}selected{% endif %}>Respondida</option>
+                </select>
+              </form>
+            </div>
+          </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="6">Nenhum contato registrado.</td>
+          <td colspan="8">Nenhum contato registrado.</td>
         </tr>
         {% endfor %}
       </tbody>

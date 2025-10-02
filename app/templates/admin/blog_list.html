@@ -10,6 +10,14 @@
         <a href="{{ url_for('app_bp.admin_blog_novo') }}" class="btn btn-primary">+ Novo Post</a>
     </div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     {% if posts %}
         <table class="blog-table">
             <thead>
@@ -18,6 +26,8 @@
                     <th>Resumo</th>
                     <th>Autor</th>
                     <th>Criado em</th>
+                    <th>Atualizado em</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +37,17 @@
                         <td>{{ post.resumo or "-" }}</td>
                         <td>{{ post.autor.name }}</td>
                         <td>{{ post.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>{{ post.atualizado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('app_bp.admin_blog_editar', post_id=post.id) }}" 
+                               class="btn btn-edit">Editar</a>
+                            <form method="POST" 
+                                  action="{{ url_for('app_bp.admin_blog_excluir', post_id=post.id) }}" 
+                                  class="delete-form"
+                                  onsubmit="return confirm('Tem certeza que deseja excluir este post?')">
+                                <button type="submit" class="btn btn-delete">Excluir</button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
